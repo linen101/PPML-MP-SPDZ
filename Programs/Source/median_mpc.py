@@ -4,6 +4,7 @@ import itertools
 import random
 import math
 import numpy as np
+import sys
 from Compiler import types, library, instructions
 from Compiler.types import Array, cfix
 
@@ -142,10 +143,10 @@ def count_greater_than_m_secretly( dataset, dataset_length, m):
 ### implement median mpc from 
 # Secure Computation of the kth-Ranked Element
 # for fixed point numbers.
-def median_mpc(num_players, dataset_length, alpha, beta, quantile):  
+def median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets):  
     # datasets will store all the personal datasets in one place
     
-    datasets = np.empty(num_players, dtype=object) 
+    #datasets = np.empty(num_players, dtype=object) 
     
     # suggested lower range
     a = types.Array(fprecision+1,  types.cfix)
@@ -169,16 +170,7 @@ def median_mpc(num_players, dataset_length, alpha, beta, quantile):
     less_shared_malicious.assign_all(0)
     greater_shared_malicious = types.Array(num_players,  types.sint)
     greater_shared_malicious.assign_all(0)
-    
-    # generate sorted datasets 
-    # for benchmark puproses only (not secure)
-    for i in range(num_players):
-        # generate random datasets of range [alpha, beta]
-        datasets[i] = generate_sorted_personal_array(i, dataset_length, alpha, beta)
-        
-        # print values for testing
-        #for j in range(dataset_length):
-            #print_ln("value %s of player %s is %s", j, i, sfix(datasets[i][j]).reveal())   
+      
     
     # set possible k-th quantile value m for this round
     a[0] = cfix(alpha)
@@ -283,7 +275,6 @@ q = median_mpc(num_players=num_players, dataset_length=dataset_length, alpha=0, 
 def active_set_update(num_players, dataset_length, alpha, beta, q):
     # Matrix containing the residual errors of each party
     residuals_shared = types.Matrix(num_players, dataset_length, types.sfix)
-    
     # Matrix containing the S vector of each party
     active_sets_shared = types.Matrix(num_players, dataset_length, types.sfix)
     for i in range(num_players):
@@ -310,25 +301,57 @@ def active_set_update(num_players, dataset_length, alpha, beta, q):
 
 def bench_participation_set_update(n_list, m, alpha, beta):
     i=1
-    
+    datasets = np.empty(m, dtype=object) 
+    active_sets = np.empty(m, dtype=object) 
     # measure the time needed in MPC for Π_{qrankMPC}
     for n in n_list:
-        r = generate_personal_matrix(0, n, 1, alpha, beta)
-        s = generate_personal_matrix(0, n, 1, alpha, beta)
-        quantile = int (n*m / 2)
+        # generate sorted datasets 
+        # for benchmark puproses only (not secure)
         start_timer(i)
-        q = median_mpc(num_players=m, dataset_length=n, alpha=alpha, beta=beta, quantile=quantile)
-        r_shared = share_personal_matrix(r, n, 1)
-        s_shared = share_personal_matrix(s, n, 1)
+        for j in range(m):
+            # generate random datasets of range [alpha, beta]
+            datasets[j] = generate_sorted_personal_array(j, n, alpha, beta)
+            share_personal_matrix(datasets[j], n, 1) 
+            # print values for testing
+            #for j in range(dataset_length):
+                #print_ln("value %s of player %s is %s", j, i, sfix(datasets[i][j]).reveal()) 
         stop_timer(i)
         
-
+        quantile = int (n*m / 2)
+        
+        start_timer(i+1)
+        q = median_mpc(num_players=m, dataset_length=n, alpha=alpha, beta=beta, quantile=quantile, datasets=datasets)
+        stop_timer(i+1)
+        
+        start_timer(i+2)
+        for j in range(m):
+            # generate random datasets of range [alpha, beta]
+            active_sets[j] = generate_personal_array(j, n, alpha, beta)
+            share_personal_matrix(active_sets[j], n, 1) 
+        stop_timer(i+2)    
+        
+        i = i + 3
 
 m = 2            
-n = 100000
+#n = 100000
 #d_list = [25]
 d_list = [25, 50]
-n_list = [1000, 10000, 100000, 1000000]
+n_list = [10000]
 alpha =0
-beta =1          
+beta =1   
+
+   
+if len(sys.argv) > 2 and sys.argv[2].isdigit():  
+    m = int(sys.argv[2])
+    print_ln(" m  =  %s", m)
+   
+if len(sys.argv) > 3 and sys.argv[3].isdigit():  
+    n = int(sys.argv[3])
+    print_ln("n = %s", n)
+
+if len(sys.argv) > 4:  
+    n_list = list(map(int, (sys.argv[4]).split(",")))
+    n_list = [n // m for n in n_list]
+    print_ln("n_list = %s", n_list)
+       
 bench_participation_set_update(n_list, m, alpha, beta)        

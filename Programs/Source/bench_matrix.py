@@ -4,6 +4,7 @@
 import itertools
 import random
 import math
+import sys
 from Compiler import types, library, instructions
 from Compiler import comparison, util
 from Compiler import ml
@@ -91,103 +92,127 @@ features = 10
 matrix_a = generate_random_shared_matrix(features, features, alpha =0,   beta=1)
 matrix_b = generate_random_shared_matrix(features, 1, alpha=0, beta=1)
 """
-def initial_input_commitment(n, d, alpha, beta):
+def initial_input_commitment(n, d_list, alpha, beta, m):
     i=1
-    for d in d_list:   
-        matrix_x = generate_personal_matrix(0, n, d, alpha,   beta)
-        matrix_y = generate_personal_matrix(0, n, 1, alpha,   beta)
-
-        # measure overhead of sharing personal matrix
+    for d in d_list: 
         start_timer(i)
-        matrix_sx = share_personal_matrix(matrix_x, n, d)
-        matrix_sy = share_personal_matrix(matrix_y, n, 1)
+        for p in range(m):  
+            matrix_x = generate_personal_matrix(p, n, d, alpha,   beta)
+            matrix_y = generate_personal_matrix(p, n, 1, alpha,   beta)
+
+            # measure overhead of sharing personal matrix
+            matrix_sx = share_personal_matrix(matrix_x, n, d)
+            matrix_sy = share_personal_matrix(matrix_y, n, 1)
         stop_timer(i)
         i = i + 1
 
-def model_input_commitment(n, d_list, alpha, beta):
+def model_input_commitment(n, d_list, alpha, beta, m):
     i=10
-    for d in d_list:        
-        # D: [dxn], C:[dxd] ,  A: [dxd], B: [dx1], H: [dxd]
-        matrix_d = generate_personal_matrix(0, d, n, alpha, beta)        
-        matrix_c = generate_personal_matrix(0, d, d, alpha, beta)
-        matrix_a = generate_personal_matrix(0, d, d, alpha, beta)
-        matrix_b = generate_personal_matrix(0, d, 1, alpha, beta)
-        matrix_h = generate_personal_matrix(0, d, d, alpha=0, beta=2**(-fprecision))
+    for d in d_list: 
+        start_timer(i) 
+        for p in range(m):        
+            # D: [dxn], C:[dxd] ,  A: [dxd], B: [dx1], H: [dxd]
+            matrix_d = generate_personal_matrix(p, d, n, alpha, beta)        
+            matrix_c = generate_personal_matrix(p, d, d, alpha, beta)
+            matrix_a = generate_personal_matrix(p, d, d, alpha, beta)
+            matrix_b = generate_personal_matrix(p, d, 1, alpha, beta)
+            matrix_h = generate_personal_matrix(p, d, d, alpha=0, beta=  2**(-fprecision))
 
-        # measure overhead of sharing personal matrix
-        start_timer(i)
-        matrix_sd = share_personal_matrix(matrix_d, d, n)
-        
-        matrix_sc = share_personal_matrix(matrix_c, d, d)
-        
-        matrix_sa = share_personal_matrix(matrix_a, d, d)  
-        
-        matrix_sb = share_personal_matrix(matrix_b, d, 1)  
-        
-        matrix_sh = share_personal_matrix(matrix_h, d, d)  
+            # measure overhead of sharing personal matrix
+            matrix_sd = share_personal_matrix(matrix_d, d, n)
+            
+            matrix_sc = share_personal_matrix(matrix_c, d, d)
+            
+            matrix_sa = share_personal_matrix(matrix_a, d, d)  
+            
+            matrix_sb = share_personal_matrix(matrix_b, d, 1)  
+            
+            matrix_sh = share_personal_matrix(matrix_h, d, d)  
         stop_timer(i)
-        
         i = i + 1
+        
 
 
-def model_update(n, d_list, alpha, beta):
-    i=1
+def model_update(n, d_list, alpha, beta, m):
+    i=20
     for d in d_list:
-        matrix_a = generate_personal_matrix(0, d, d, alpha,   beta)
-        matrix_b = generate_personal_matrix(0, d, 1, alpha,   beta)
-        matrix_w = generate_personal_matrix(0, d, 1, alpha, beta)
-        matrix_u = generate_personal_matrix(0, d, 1, alpha, beta)
-
         # measure overhead of sharing personal matrix
         # has been computed in model_input_commitment
-        matrix_sa = share_personal_matrix(matrix_a, d, d)
-        matrix_sb = share_personal_matrix(matrix_b, d, 1)
-        matrix_sw = share_personal_matrix(matrix_w, d, 1)  
-        matrix_su = share_personal_matrix(matrix_u, d, 1)  
+        matrix_sa = generate_random_shared_matrix(d, d, alpha, beta)
+        matrix_sb = generate_random_shared_matrix(d, 1, alpha, beta)
+        matrix_swu = generate_random_shared_matrix(d, 1, alpha, beta)
 
         # measure overhead of matrix mult in ADMM
         start_timer(i)
-        for _ in range(10):
-            # measure overhead of d mult -> ADMM
-            C = mat_prod(a=matrix_sa, b=matrix_sb)    
-        
-            D = mat_prod(a=matrix_sa, b=matrix_sw)    
+        @for_range_opt(m)
+        def _(j):
+            @for_range_opt(10)
+            def _(k):
+                # measure overhead of d mult -> ADMM
+                C = mat_prod(a=matrix_sa, b=matrix_sb)    
             
-            E = mat_prod(a=matrix_sa, b=matrix_su)    
+                D = mat_prod(a=matrix_sa, b=matrix_swu)    
+                
         stop_timer(i)        
         i = i + 1
 
-def model_reveal(n, d_list, alpha, beta):
-    matrix_w = generate_personal_matrix(0, d, 1, alpha, beta)
-    matrix_sw = share_personal_matrix(matrix_w, d, 1)
+def model_reveal(n, d_list, alpha, beta):   
     # measure time for opening w
-    i = 1
+    i = 30
     for d in d_list:
+        matrix_sw = generate_random_shared_matrix(d, 1, alpha, beta)
         start_timer(i)
         matrix_sw.reveal()
         stop_timer(i)
         i = i + 1
 
-m = 2            
-n = 1000
-d = 100
-#d_list = [25]
-d_list = [25, 50, 75, 100, 150, 200, 300]
-n_list = [1000, 10000, 100000, 1000000]
 alpha =0
 beta =1  
 
-initial_input_commitment(n, d_list, alpha, beta)      
-#model_update(n, d_list, alpha, beta)
-model_input_commitment(n, d_list, alpha, beta)
-#model_reveal(n, d_list, alpha, beta)
+
+
+
+# Default values (optional)
+m = 2  # Number of parties
+n = 500  # Number of samples
+d = 100  # Number of features
+d_list = [25, 50, 75, 100, 150, 200, 300]
+n_list = [1000, 10000, 100000, 1000000]
+
+# Parse arguments only when running (not compiling)
+   
+if len(sys.argv) > 2 and sys.argv[2].isdigit():  
+    m = int(sys.argv[2])
+    print_ln(" m  =  %s", m)
+   
+if len(sys.argv) > 3 and sys.argv[3].isdigit():  
+    n = int(sys.argv[3])
+    print_ln("n = %s", n)
+
+if len(sys.argv) > 4 and sys.argv[4].isdigit():  
+    d = int(sys.argv[4])
+    print_ln("d = %s", d)
+   
+if len(sys.argv) > 5:  
+    d_list = list(map(int, sys.argv[5].split(",")))
+    print_ln("d_list = %s", d_list)
+
+if len(sys.argv) > 6:  
+    n_list = list(map(int, (sys.argv[6]).split(",")))
+    n_list = [n // m for n in n_list]
+    print_ln("n_list = %s", n_list)
+
+# Call functions with the parsed parameters
+
+initial_input_commitment(n, d_list, alpha, beta, m) 
+model_input_commitment(n, d_list, alpha, beta , m)
+model_update(n, d_list, alpha, beta, m)
+model_reveal(n, d_list, alpha, beta)
 #participation_set_update(n_list, m, alpha, beta)
 
 #a = sfix.get_random(alpha, beta, 100)
 #a = types.personal(0, cfix.get_random(alpha, beta, 100))
 #ssfix(a)
-
-
 """
 mat = types.personal(0, cfix.Matrix(5, 5))
 mat[0][0] = cfix(1)

@@ -187,6 +187,7 @@ if len(sys.argv) > 2 and sys.argv[2].isdigit():
    
 if len(sys.argv) > 3 and sys.argv[3].isdigit():  
     n = int(sys.argv[3])
+    n = n // m
     print_ln("n = %s", n)
 
 if len(sys.argv) > 4 and sys.argv[4].isdigit():  
@@ -206,8 +207,8 @@ if len(sys.argv) > 6:
 
 initial_input_commitment(n, d_list, alpha, beta, m) 
 model_input_commitment(n, d_list, alpha, beta , m)
-model_update(n, d_list, alpha, beta, m)
-model_reveal(n, d_list, alpha, beta)
+#model_update(n, d_list, alpha, beta, m)
+#model_reveal(n, d_list, alpha, beta)
 #participation_set_update(n_list, m, alpha, beta)
 
 #a = sfix.get_random(alpha, beta, 100)

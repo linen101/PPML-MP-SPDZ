@@ -2,11 +2,11 @@
 
 # Default values
 parties=(2 4 8)   # Number of parties
-N=1000       # Number of samples
+N=100000       # Number of samples
 D=10          # Number of features
-D_LIST="25,50,75,100"  # Features list
-N_LIST="100" # Samples list
-PROGRAM="bench_matrix"
+D_LIST="10,100"  # Features list
+N_LIST="10000" # Samples list
+PROGRAM="bench_naive"
 
 # Check fo provided command-line arguments
 if [ $# -ge 1 ]; then parties=$1; fi
@@ -28,7 +28,7 @@ for p in "${parties[@]}"; do
     # Generate the correct executable name
     EXECUTABLE="${PROGRAM}-${p}-${N}-${D}-${D_LIST}-${N_LIST}"
     for ((i=0; i<p; i++)); do
-        ./lowgear-party.x -N $p -p $i $EXECUTABLE  &> TRIP-PROTOCOL-party_$i-parties-$p-samples$N.log &
+        ./lowgear-party.x -N $p -p $i $EXECUTABLE  &> NAIVE-PROTOCOL-party_$i-parties-$p-samples$N.log &
         PIDS[$i]=$!
     done
 

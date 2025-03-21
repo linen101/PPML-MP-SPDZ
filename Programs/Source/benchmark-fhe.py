@@ -1,4 +1,4 @@
-program.use_edabit(True)
+#program.use_edabit(True)
 program.set_bit_length(200)
 
 import itertools
@@ -6,7 +6,7 @@ import random
 import math
 #import numpy as np
 from Compiler import types, library, instructions
-from Compiler import comparison, util
+from Compiler import comparison, util, ml
 from Programs.Source import random_matrix
 
 #fprecision = 32
@@ -17,6 +17,10 @@ def create_a_b():
     b = types.sint.get_random(size=1)
     return (a,b)
 
+def create_a_values(size):
+    a = types.sint.get_random(size=100)
+    return a
+
 def bench_mul(a,b):
     a*b
 
@@ -25,6 +29,10 @@ def bench_square(a):
     
 def bench_comp(a,b):
     a < b
+    
+def bench_argmax(a_values):
+    a_max = ml.argmax(a_values)  
+    return a_max    
 
 start_timer(1)
 (a,b) = create_a_b()  
@@ -38,6 +46,20 @@ start_timer(3)
 bench_square(a)  
 stop_timer(3)  
 
-start_timer(4)
-bench_comp(a,b)  
-stop_timer(4)
+#start_timer(4)
+#bench_comp(a,b)  
+#stop_timer(4)
+
+start_timer(5)
+a_values = create_a_values(size=100)  
+stop_timer(5) 
+    
+for i in range(100):
+    #a_values[i].reveal()
+    print_ln('a is %s.', (a_values[i]).reveal())
+
+start_timer(6)
+@for_range_opt(10)
+def _(i):
+    a_max = bench_argmax(a_values)  
+stop_timer(6)

@@ -75,82 +75,89 @@ def mat_prod(a, b):
     c =  a.direct_mul(b)
     return c
 
-def check_inverse(dataset_length, matrix_I, epsilon):
-    @for_range_opt(dataset_length)
-    def _(i):
-        @for_range_opt(dataset_length)
-        def _(j):
-            result = (matrix_I[i][j] < epsilon )  
-            result.reveal()
-"""
-# input size           
-dataset_length = 100000
-features = 10
-
-# A: [dxd], B: [dx1]
-matrix_a = generate_random_shared_matrix(features, features, alpha =0,   beta=1)
-matrix_b = generate_random_shared_matrix(features, 1, alpha=0, beta=1)
-"""
-
-def bench_helen(m, d_list, alpha, beta):
+def inverse_check(d_list, epsilon=0.0001):
     i=1
-    for d in d_list: 
-        start_timer(i) 
-        for p in range(m): 
-                   
-            # V: [dxd], 
-            # A: [dxd], 
-            # A^-1: [dxd], 
-            # V.transpose()V :[dxd] , 
-            for j in range(4):
-                matrix_d = generate_personal_matrix(p, d, d, alpha, beta)        
-                # measure overhead of sharing personal matrix
-                matrix_sd = share_personal_matrix(matrix_d, d, d)
-                
-            # Theta:[dxd]  diag, 
-            # \Sigma:[dxd] diag,
-            # y*: [dx1],
-            # b: [dx1], 
-            # V\THeta: [dxd] diag,  
-            # \Sigma^2 : [dxd] diag,
-            # V\Sigma : [dxd] diag
-            # \Sigma^2 \Theta : [dxd] diag
-            for j in range(4):
-                matrix_a = generate_personal_matrix(p, 1, d, alpha, beta)
-                matrix_b = generate_personal_matrix(p, d, 1, alpha, beta)
-                matrix_sa = share_personal_matrix(matrix_a, 1, d)  
-                matrix_sb = share_personal_matrix(matrix_b, d, 1) 
+    for d in d_list:
+        matrix_result = generate_epsilon_matrix(d=d, alpha=0, beta=0.00001)
+        start_timer(i)
+        @for_range_opt(d)
+        def _(i):
+            @for_range_opt(d_list)
+            def _(j):
+                result = (matrix_result[i][j] < epsilon )  
+                result.reveal()
         stop_timer(i)
-                
-        start_timer(i+1)  
-        for p in range(m):      
-            for j in range(6):
-                mat_prod(matrix_sa , matrix_sb)
-            for j in range(12):
-                mat_prod(matrix_sd , matrix_sb) 
-            for j in range(2):
-                check_inverse(d, matrix_sd, 1)      
-        stop_timer(i+1)
-        i = i + 2
+        i = i+1   
+
+def range_check(n, q=0.1):
+    i=20
+    matrix_result = generate_random_shared_matrix(n, 1, alpha=0, beta=1)
+    start_timer(i)
+    @for_range_opt(n)
+    def _(i):
+        result = (matrix_result[i][j] < q )  
+    stop_timer(i)
+    i = i+1           
+             
+def model_inp_com(n, d_list, alpha, beta, m):
+    i=10
+    for d in d_list:
+        # measure overhead of sharing personal matrix
+        # has been computed in model_input_commitment
+        matrix_sa = generate_random_shared_matrix(1, n, alpha, beta)
+        matrix_sb = generate_random_shared_matrix(n, 1, alpha, beta)
+        matrix_sc = generate_random_shared_matrix(1, d, alpha, beta)
+        matrix_sd = generate_random_shared_matrix(d, 1, alpha, beta)
+        # measure overhead of matrix mult in ADMM
+        start_timer(i)
+        @for_range_opt(m)
+        def _(j):
+            # measure overhead of d mult -> ADMM
+            C = mat_prod(a=matrix_sa, b=matrix_sb)    
         
+            D = mat_prod(a=matrix_sc, b=matrix_sd)    
+                
+        stop_timer(i)        
+        i = i + 1
+
+alpha =0
+beta =1 
 # Default values (optional)
-alpha=0
-beta=1
 m = 2  # Number of parties
-d_list = [25, 50, 75, 100]
+n = 500  # Number of samples
+d = 100  # Number of features
+d_list = [25, 50, 75, 100, 150, 200, 300]
+n_list = [1000, 10000, 100000, 1000000]
+
 # Parse arguments only when running (not compiling)
    
 if len(sys.argv) > 2 and sys.argv[2].isdigit():  
     m = int(sys.argv[2])
     print_ln(" m  =  %s", m)
    
-if len(sys.argv) > 3:  
-    d_list = list(map(int, sys.argv[3].split(",")))
+if len(sys.argv) > 3 and sys.argv[3].isdigit():  
+    n = int(sys.argv[3])
+    n = n // m
+    print_ln("n = %s", n)
+
+if len(sys.argv) > 4 and sys.argv[4].isdigit():  
+    d = int(sys.argv[4])
+    print_ln("d = %s", d)
+   
+if len(sys.argv) > 5:  
+    d_list = list(map(int, sys.argv[5].split(",")))
     print_ln("d_list = %s", d_list)
 
-# Call functions with the parsed parameters
+if len(sys.argv) > 6:  
+    n_list = list(map(int, (sys.argv[6]).split(",")))
+    n_list = [n // m for n in n_list]
+    print_ln("n_list = %s", n_list)
 
-bench_helen(m, d_list, alpha, beta)
+# Call functions with the parsed parameters
+check_inverse(d_list=d_list, epsilon=0.01)
+model_inp_com(n, d_list, alpha, beta, m)
+range_check(n)
+
 
 #a = sfix.get_random(alpha, beta, 100)
 #a = types.personal(0, cfix.get_random(alpha, beta, 100))

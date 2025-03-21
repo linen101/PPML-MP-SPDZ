@@ -11,8 +11,8 @@ if [ $# -ge 1 ]; then M=$1; fi
 
 # Step 1: Compile the program (No extra arguments passed)
 echo "Compiling $PROGRAM..."
-./compile.py --mixed --edabit -F 200 -P 6427752177035961102167848369364650410088811975131171341205571 $PROGRAM $M  || { echo "Compilation failed"; exit 1; }
-#./compile.py -F 200 $PROGRAM $M  || { echo "Compilation failed"; exit 1; }
+#./compile.py --mixed --edabit -F 200 -P 6427752177035961102167848369364650410088811975131171341205571 $PROGRAM $M  || { echo "Compilation failed"; exit 1; }
+./compile.py -F 200 $PROGRAM $M  || { echo "Compilation failed"; exit 1; }
 
 # Step 2: Run parties in parallel with dynamic arguments
 echo "Running $M parties in parallel for fhe"

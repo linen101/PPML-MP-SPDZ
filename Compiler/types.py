@@ -2002,6 +2002,13 @@ class personal(Tape._no_truth):
         self._san(value)
         self._v[index] = value
 
+    def get_vector(self, *args, **kwargs):
+        return personal(self.player, self._v.get_vector(*args, **kwargs))
+
+    @property
+    def size(self):
+        return self._v.size
+
     __getitem__ = lambda self, index: personal(self.player, self._v[index])
 
     __add__ = lambda self, other: personal(self.player, self._san(other) + other)
@@ -2423,6 +2430,47 @@ class _secret(_arithmetic_register, _secret_structure):
     def output(self):
         print_reg_plains(self)
 
+    @classmethod
+    @set_instruction_type
+    def read_from_file(cls, start, n_items=1, crash_if_missing=True, size=1):
+        """ Read shares from
+        ``Persistence/Transactions-[gf2n-]P<playerno>.data``. See :ref:`this
+        section <persistence>` for details on the data format.
+
+        :param start: starting position in number of shares from beginning (int/regint/cint)
+        :param n_items: number of items (int)
+        :param crash_if_missing: crash if file not found (default)
+        :param size: vector size (int)
+        :returns: destination for final position, -1 for eof reached, or -2 for file not found (regint)
+        :returns: list of shares
+        """
+        shares = [cls(size=size) for i in range(n_items)]
+        stop = regint()
+        readsharesfromfile(regint.conv(start), stop, *shares)
+        if crash_if_missing:
+            library.runtime_error_if(stop == -2, 'Persistence not found')
+        return stop, shares
+
+    @classmethod
+    @set_instruction_type
+    def write_to_file(cls, shares, position=None):
+        """ Write shares to ``Persistence/Transactions-[gf2n-]P<playerno>.data``
+        (appending at the end). See :ref:`this section <persistence>`
+        for details on the data format.
+
+        :param shares: (list or iterable of shares)
+        :param position: start position (int/regint/cint),
+            defaults to end of file
+        """
+        if isinstance(shares, cls):
+            shares = [shares]
+        for share in shares:
+            assert isinstance(share, cls)
+            assert share.size == shares[0].size
+        if position is None:
+            position = -1
+        writesharestofile(regint.conv(position), *shares)
+
 class sint(_secret, _int):
     """
     Secret integer in the protocol-specific domain. It supports
@@ -2691,45 +2739,6 @@ class sint(_secret, _int):
         :param values: list of sint
         """
         writesocketshare(client_id, message_type, values[0].size, *values)
-
-    @classmethod
-    def read_from_file(cls, start, n_items=1, crash_if_missing=True, size=1):
-        """ Read shares from
-        ``Persistence/Transactions-P<playerno>.data``. See :ref:`this
-        section <persistence>` for details on the data format.
-
-        :param start: starting position in number of shares from beginning (int/regint/cint)
-        :param n_items: number of items (int)
-        :param crash_if_missing: crash if file not found (default)
-        :param size: vector size (int)
-        :returns: destination for final position, -1 for eof reached, or -2 for file not found (regint)
-        :returns: list of shares
-        """
-        shares = [cls(size=size) for i in range(n_items)]
-        stop = regint()
-        readsharesfromfile(regint.conv(start), stop, *shares)
-        if crash_if_missing:
-            library.runtime_error_if(stop == -2, 'Persistence not found')
-        return stop, shares
-
-    @staticmethod
-    def write_to_file(shares, position=None):
-        """ Write shares to ``Persistence/Transactions-P<playerno>.data``
-        (appending at the end). See :ref:`this section <persistence>`
-        for details on the data format.
-
-        :param shares: (list or iterable of sint)
-        :param position: start position (int/regint/cint),
-            defaults to end of file
-        """
-        if isinstance(shares, sint):
-            shares = [shares]
-        for share in shares:
-            assert isinstance(share, sint)
-            assert share.size == shares[0].size
-        if position is None:
-            position = -1
-        writesharestofile(regint.conv(position), *shares)
 
     @vectorized_classmethod
     def load_mem(cls, address, mem_type=None):
@@ -4158,6 +4167,8 @@ class cfix(_number, _structure):
         other = self.parse_type(other)
         if isinstance(other, cfix):
             return cfix._new(self.v + other.v, k=self.k, f=self.f)
+        elif isinstance(other, sfix):
+            return other + self
         else:
             return NotImplemented
 

@@ -105,9 +105,9 @@ void set_up_client_socket(int& mysocket,const char* hostname,int Portnum)
          }
        errno = connect_errno;
    }
-   while (fl == -1
-       && (errno == ECONNREFUSED || errno == ETIMEDOUT || errno == EINPROGRESS)
-       && timer.elapsed() < CONNECTION_TIMEOUT);
+   while (fl == -1 &&
+    (errno == ECONNREFUSED || errno == ETIMEDOUT || errno == EINPROGRESS || errno == ECONNRESET) &&
+    timer.elapsed() < CONNECTION_TIMEOUT);
 
    if (fl < 0)
      {

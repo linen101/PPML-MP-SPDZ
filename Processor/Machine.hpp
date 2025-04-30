@@ -590,7 +590,8 @@ void Machine<sint, sgf2n>::run(const string& progname)
     cerr << "Full broadcast" << endl;
 #endif
 
-  if (not OnlineOptions::singleton.has_option("output_full_memory"))
+  if (not OnlineOptions::singleton.has_option("output_full_memory")
+      and OnlineOptions::singleton.disk_memory.empty())
     {
       // Reduce memory size to speed up
       unsigned max_size = 1 << 20;

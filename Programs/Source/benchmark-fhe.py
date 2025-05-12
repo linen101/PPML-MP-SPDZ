@@ -1,4 +1,4 @@
-#program.use_edabit(True)
+program.use_edabit(True)
 
 program.set_security(40)
 program.set_bit_length(32)
@@ -18,18 +18,18 @@ bit_length = program.bit_length
 
 # argmax to be computed in parallel depending on the depth of the tree
 d1 = 100
-d2 = 20
-d3 = 40
-d4 = 80
+d2 = 200
+d3 = 400
+d4 = 800
 
-n_threads = 1
+n_threads = 48
 
 # number of rounds estimated for a computation
 # propably not needed
 l = 1
 
-# number of computations
-n = 10
+# number of elements in each vector
+n = 100
 
 # result
 res = sint.Array(n)

@@ -128,6 +128,7 @@ b_values = create_a_values(size=n)
 a_tuple_array[0].assign(a_values)
 a_tuple_array[1].assign(b_values)
 a_tuple_array = a_tuple_array.transpose()
+a_array = sfix.Array(n)
 
 """
 start_timer(1)
@@ -209,6 +210,7 @@ a_array[7] = sint(21)
 a_array[8] = sint(111)
 a_array[9] = sint(2)
 """
+
 """
 # BENCHMARK the argmax operated over fraction values with truncation
 #### TODO! ####

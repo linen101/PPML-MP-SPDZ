@@ -165,7 +165,7 @@ a_tuple_array[2][1] = sint(12)
 """
 
 
-"""
+#"""
 
 # benchmark the argmax operated over fraction values without truncation
 start_timer(6)
@@ -190,7 +190,7 @@ def _(i):
     #def _(i):
     a_max = bench_argmax_fraction(a_tuple_array)        
 stop_timer(6)
-"""
+#"""
 """
 a_max_fraction = a_max_fraction.reveal()
 a_tuple_array=(a_tuple_array).reveal()
@@ -226,7 +226,7 @@ stop_timer(7)
 #a_tuple_array=(a_tuple_array).reveal()
 #print_ln("tuple array is: %s ", a_tuple_array)
 """
-
+"""
 start_timer(8)
 @for_range_opt_multithread(n_threads, d1)
 def _(i):
@@ -253,7 +253,7 @@ def _(i):
     a_array[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
     a_max = bench_argmax(a_array)       
 stop_timer(8)
-
+"""
 """
 start_timer(9)
 @multithread(n_threads, n)

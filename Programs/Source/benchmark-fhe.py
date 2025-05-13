@@ -220,31 +220,44 @@ stop_timer(7)
 #a_tuple_array=(a_tuple_array).reveal()
 #print_ln("tuple array is: %s ", a_tuple_array)
 """
+
+"""
+If you need to use a Matrix with multi-threading, 
+you need to allocate several matrices before-hand. 
+You could allocate MM = sint.Tensor([10, 2, 2]) and 
+then call M = MM[i]inside the loop.
+"""
+
 start_timer(8)
-@for_range_opt(d1)
+MM  = sint.Tensor([d1, n])
+@for_range_opt_multithread(n_threads, d1)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_array[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
-    a_max = bench_argmax(a_array)
-@for_range_opt(d2)
+    M = MM[i]    
+    M[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
+    a_max = bench_argmax(M)
+@for_range_opt(n_threads, d2)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_array[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
-    a_max = bench_argmax(a_array)
-@for_range_opt(d3)
+    M = MM[i]    
+    M[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
+    a_max = bench_argmax(M)
+@for_range_opt(n_threads, d3)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_array[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
-    a_max = bench_argmax(a_array)
-@for_range_opt(d4)
+    M = MM[i]    
+    M[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
+    a_max = bench_argmax(M)
+@for_range_opt(n_threads, d4)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_array[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
-    a_max = bench_argmax(a_array)       
+    M = MM[i]    
+    M[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
+    a_max = bench_argmax(M)       
 stop_timer(8)
 
 """

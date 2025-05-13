@@ -321,4 +321,4 @@ def _(i):
 @for_range_opt_multithread(n_threads, d4*n)
 def _(i):
     compute_gini(a,b,c,d,l)
-start_timer(10)
+stop_timer(10)

@@ -1,8 +1,8 @@
-program.use_edabit(True)
+#program.use_edabit(True)
 
 program.set_security(40)
 program.set_bit_length(32)
-program.use_trunc_pr = True
+#program.use_trunc_pr = True
 
 import itertools
 import random
@@ -27,7 +27,7 @@ n_threads = 48
 
 # number of rounds estimated for a computation
 # propably not needed
-l = 1
+l = 10
 
 # number of elements in each vector
 n = 100
@@ -57,6 +57,33 @@ print('%d-lengthed vectors for argmax in %d threads' % (n, n_threads))
 fprecision = 32
 sfix.set_precision(f=fprecision)
 
+def create_tuple_array(n):
+    """
+    create a "tuple" array to encode sequence of gini indes values as fraction values
+    a_tuple_array.get_column(0) : nominator
+    a_tuple_array.get_column(1) : denominator
+    Args:
+        n (int): length of the array
+
+    Returns:
+        sint.Matrix(n,2): tuple array
+    """
+    a_tuple_array = sint.Matrix(2,n)
+    a_values = create_a_values(size=n)
+    b_values = create_a_values(size=n)  
+    a_tuple_array[0].assign(a_values)
+    a_tuple_array[1].assign(b_values)
+    a_tuple_array = a_tuple_array.transpose()
+    return a_tuple_array
+
+def compute_gini(a,b,c,d,l):
+    @for_range_opt(l)
+    def _(j):
+        b.square()
+        d.square()    
+    gini = a*b + c*d + a*c
+    return gini
+    
 def argmax(x):
     """ Compute index of maximum element.
 
@@ -65,7 +92,7 @@ def argmax(x):
     """
     def op(a, b):
         #print_ln("index now is: %s", a[0])
-        print_ln("a value now is: %s", a[1].reveal())
+        #print_ln("a value now is: %s", a[1].reveal())
         #print_ln("a is: %s", a, print_secrets=True)
         comp = (a[1] > b[1])
         return comp.if_else(a[0], b[0]), comp.if_else(a[1], b[1])
@@ -93,9 +120,14 @@ def argmax_fraction(x):
     return tree_reduce(op, enumerate(x))[0]
 
 def create_a_b():
-    a = types.sint.get_random(size=1)
-    b = types.sint.get_random(size=1)
+    a = types.sint.get_random_int(8, size=1)
+    b = types.sint.get_random_int(8, size=1)
     return (a,b)
+
+def create_val():
+    val = types.sint.get_random_int(8, size=1)
+    val = val.square()
+    return  MemValue(val)
 
 def create_a_values(size):
     a = types.sint.get_random_int(8,size=size)
@@ -123,13 +155,8 @@ def bench_lts(a,b):
     """Computes the Least Than Secret (LTS) of two values and prints the result."""
     result = SC_fun.LTS(sint(a), sint(b), bit_length)
 
-a_tuple_array = sint.Matrix(2,n)
-a_values = create_a_values(size=n)
-b_values = create_a_values(size=n)  
-a_tuple_array[0].assign(a_values)
-a_tuple_array[1].assign(b_values)
-a_tuple_array = a_tuple_array.transpose()
-a_array = sfix.Array(n)
+# create a "tuple" array to encode sequence of gini indes values as fraction values
+a_tuple_array = create_tuple_array(n)
 
 """
 start_timer(1)
@@ -228,7 +255,7 @@ you need to allocate several matrices before-hand.
 You could allocate MM = sint.Tensor([10, 2, 2]) and 
 then call M = MM[i]inside the loop.
 """
-
+"""
 start_timer(8)
 MM  = sint.Tensor([d1, n])
 @for_range_opt_multithread(n_threads, d1)
@@ -263,6 +290,7 @@ def _(i):
     M[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
     a_max = bench_argmax(M)       
 stop_timer(8)
+"""
 
 """
 start_timer(9)
@@ -273,3 +301,24 @@ def _(base, m):
         (SC_fun.LTS(sint(a), sint(b), m)).store_in_mem(base)
 stop_timer(9)
 """
+# benchmark computation of GINI index with G' formula of overleaf
+
+start_timer(10)
+a = create_val()
+b = create_val()
+c = create_val()
+d = create_val()
+
+@for_range_opt_multithread(n_threads, d1*n)
+def _(i):
+    compute_gini(a,b,c,d,l)     
+@for_range_opt_multithread(n_threads, d2*n)
+def _(i):
+    compute_gini(a,b,c,d,l)
+@for_range_opt_multithread(n_threads, d3*n)
+def _(i):
+    compute_gini(a,b,c,d,l)
+@for_range_opt_multithread(n_threads, d4*n)
+def _(i):
+    compute_gini(a,b,c,d,l)
+start_timer(10)

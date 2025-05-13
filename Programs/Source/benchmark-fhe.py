@@ -229,7 +229,7 @@ then call M = MM[i]inside the loop.
 """
 
 start_timer(8)
-MM  = sint.Tensor([d1, n])
+MM  = sint.Tensor([n_threads, n])
 @for_range_opt_multithread(n_threads, d1)
 def _(i):
     #@for_range(l)
@@ -237,21 +237,21 @@ def _(i):
     M = MM[i]    
     M[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
     a_max = bench_argmax(M)
-@for_range_opt(n_threads, d2)
+@for_range_opt_multithread(n_threads, d2)
 def _(i):
     #@for_range(l)
     #def _(i):
     M = MM[i]    
     M[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
     a_max = bench_argmax(M)
-@for_range_opt(n_threads, d3)
+@for_range_opt_multithread(n_threads, d3)
 def _(i):
     #@for_range(l)
     #def _(i):
     M = MM[i]    
     M[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
     a_max = bench_argmax(M)
-@for_range_opt(n_threads, d4)
+@for_range_opt_multithread(n_threads, d4)
 def _(i):
     #@for_range(l)
     #def _(i):

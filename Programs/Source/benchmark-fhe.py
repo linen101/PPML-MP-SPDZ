@@ -81,7 +81,7 @@ def compute_gini(a,b,c,d,l):
     def _(j):
         b.square()
         d.square()    
-    gini = a*b + c*d + a*c
+    gini = (a*b + c*d) / a*c
     return gini
     
 def argmax(x):

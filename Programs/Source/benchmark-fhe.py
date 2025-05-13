@@ -1,4 +1,4 @@
-#program.use_edabit(True)
+program.use_edabit(True)
 
 program.set_security(40)
 program.set_bit_length(32)

@@ -164,9 +164,6 @@ a_tuple_array[2][0] = sint(4)
 a_tuple_array[2][1] = sint(12)
 """
 
-
-#"""
-
 # benchmark the argmax operated over fraction values without truncation
 start_timer(6)
 @for_range_opt_multithread(n_threads, d1)
@@ -190,7 +187,7 @@ def _(i):
     #def _(i):
     a_max = bench_argmax_fraction(a_tuple_array)        
 stop_timer(6)
-#"""
+
 """
 a_max_fraction = a_max_fraction.reveal()
 a_tuple_array=(a_tuple_array).reveal()

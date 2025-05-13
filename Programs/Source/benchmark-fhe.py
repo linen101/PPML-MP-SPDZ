@@ -1,4 +1,4 @@
-program.use_edabit(True)
+#program.use_edabit(True)
 
 program.set_security(40)
 program.set_bit_length(32)
@@ -163,7 +163,7 @@ a_tuple_array[1][1] = sint(9)
 a_tuple_array[2][0] = sint(4)
 a_tuple_array[2][1] = sint(12)
 """
-
+"""
 # benchmark the argmax operated over fraction values without truncation
 start_timer(6)
 @for_range_opt_multithread(n_threads, d1)
@@ -187,7 +187,7 @@ def _(i):
     #def _(i):
     a_max = bench_argmax_fraction(a_tuple_array)        
 stop_timer(6)
-
+"""
 """
 a_max_fraction = a_max_fraction.reveal()
 a_tuple_array=(a_tuple_array).reveal()
@@ -208,11 +208,8 @@ a_array[8] = sint(111)
 a_array[9] = sint(2)
 """
 
-"""
 # BENCHMARK the argmax operated over fraction values with truncation
-#### TODO! ####
-a_array = sfix.Array(n)
-
+"""
 # benchmark fixed point division for the gini index
 start_timer(7)
 a_array[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)
@@ -223,34 +220,33 @@ stop_timer(7)
 #a_tuple_array=(a_tuple_array).reveal()
 #print_ln("tuple array is: %s ", a_tuple_array)
 """
-"""
 start_timer(8)
-@for_range_opt_multithread(n_threads, d1)
+@for_range_opt(d1)
 def _(i):
     #@for_range(l)
     #def _(i):
     a_array[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
     a_max = bench_argmax(a_array)
-@for_range_opt_multithread(n_threads, d2)
+@for_range_opt(d2)
 def _(i):
     #@for_range(l)
     #def _(i):
     a_array[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
     a_max = bench_argmax(a_array)
-@for_range_opt_multithread(n_threads, d3)
+@for_range_opt(d3)
 def _(i):
     #@for_range(l)
     #def _(i):
     a_array[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
     a_max = bench_argmax(a_array)
-@for_range_opt_multithread(n_threads, d4)
+@for_range_opt(d4)
 def _(i):
     #@for_range(l)
     #def _(i):
     a_array[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
     a_max = bench_argmax(a_array)       
 stop_timer(8)
-"""
+
 """
 start_timer(9)
 @multithread(n_threads, n)

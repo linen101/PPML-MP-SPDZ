@@ -16,7 +16,7 @@ from Compiler import SC_fun
 
 # Set the bit length based on edabit
 bit_length = program.bit_length
-
+print('%d-bit_length' % bit_length)
 # argmax to be computed in parallel depending on the depth of the tree
 d1 = 100
 d2 = 200
@@ -125,12 +125,12 @@ def create_a_b():
     return (a,b)
 
 def create_val():
-    val = types.sint.get_random_int(60, size=1)
+    val = types.sint.get_random_int(120, size=1)
     val = val.square()
     return  MemValue(val)
 
 def create_a_values(size):
-    a = types.sint.get_random_int(60,size=size)
+    a = types.sint.get_random_int(120,size=size)
     a = a.square()
     return a
 

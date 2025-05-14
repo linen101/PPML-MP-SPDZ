@@ -125,13 +125,13 @@ def create_a_b():
     return (a,b)
 
 def create_val():
-    val = types.sint.get_random_int(120, size=1)
+    val = types.sint.get_random_int(60, size=1)
     val = val.square()
     return  MemValue(val)
 
 def create_a_values(size):
-    a = types.sint.get_random_int(120,size=size)
-    a = a.square() + 1
+    a = types.sint.get_random_int(60,size=size)
+    a = a.square()
     return a
 
 def bench_mul(a,b):

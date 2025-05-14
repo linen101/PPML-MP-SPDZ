@@ -1,7 +1,7 @@
 #program.use_edabit(True)
 
 program.set_security(40)
-program.set_bit_length(32)
+program.set_bit_length(240)
 #program.use_trunc_pr = True
 
 import itertools
@@ -120,17 +120,17 @@ def argmax_fraction(x):
     return tree_reduce(op, enumerate(x))[0]
 
 def create_a_b():
-    a = types.sint.get_random_int(8, size=1)
-    b = types.sint.get_random_int(8, size=1)
+    a = types.sint.get_random_int(120, size=1)
+    b = types.sint.get_random_int(120, size=1)
     return (a,b)
 
 def create_val():
-    val = types.sint.get_random_int(8, size=1)
+    val = types.sint.get_random_int(120, size=1)
     val = val.square()
     return  MemValue(val)
 
 def create_a_values(size):
-    a = types.sint.get_random_int(8,size=size)
+    a = types.sint.get_random_int(120,size=size)
     a = a.square() + 1
     return a
 
@@ -191,7 +191,7 @@ a_tuple_array[1][1] = sint(9)
 a_tuple_array[2][0] = sint(4)
 a_tuple_array[2][1] = sint(12)
 """
-"""
+
 # benchmark the argmax operated over fraction values without truncation
 start_timer(6)
 @for_range_opt_multithread(n_threads, d1)
@@ -215,7 +215,7 @@ def _(i):
     #def _(i):
     a_max = bench_argmax_fraction(a_tuple_array)        
 stop_timer(6)
-"""
+
 """
 a_max_fraction = a_max_fraction.reveal()
 a_tuple_array=(a_tuple_array).reveal()
@@ -302,7 +302,7 @@ def _(base, m):
 stop_timer(9)
 """
 # benchmark computation of GINI index with G' formula of overleaf
-
+"""
 start_timer(10)
 a = create_val()
 b = create_val()
@@ -322,3 +322,4 @@ def _(i):
 def _(i):
     compute_gini(a,b,c,d,l)
 stop_timer(10)
+"""

@@ -16,7 +16,7 @@ from Compiler import SC_fun
 
 # Set the bit length based on edabit
 bit_length = program.bit_length
-print('%d-bit_length' % bit_length)
+print_ln("%s-bit_length", bit_length)
 # argmax to be computed in parallel depending on the depth of the tree
 d1 = 100
 d2 = 200

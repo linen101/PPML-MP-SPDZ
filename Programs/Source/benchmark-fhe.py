@@ -1,7 +1,7 @@
 #program.use_edabit(True)
 
 program.set_security(40)
-#program.set_bit_length(240)
+program.set_bit_length(240)
 #program.use_trunc_pr = True
 
 import itertools

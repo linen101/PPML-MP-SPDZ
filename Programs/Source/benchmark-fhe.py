@@ -1,6 +1,9 @@
 #program.use_edabit(True)
 
 program.set_security(40)
+
+# set the bit length of the cleartext for the comparisons
+#program.set_bit_length(64)
 program.set_bit_length(120)
 #program.use_trunc_pr = True
 
@@ -23,14 +26,14 @@ d2 = 200
 d3 = 400
 d4 = 800
 
-n_threads = 4
+n_threads = 48
 
 # number of rounds estimated for a computation
 # propably not needed
 l = 10
 
 # number of elements in each vector
-n = 100
+n = 10
 
 # result
 res = sint.Array(n)
@@ -111,7 +114,7 @@ def argmax_fraction(x):
         # a and b are (index, [numerator, denominator])
         num_a, den_a = a[1]
         num_b, den_b = b[1]
-        comp = (num_a * den_b > num_b * den_a)
+        comp = (num_a.TruncMul(den_b,32,32) > num_b.TruncMul(den_a,32,32))
         #print_ln("index now is: %s", a[0], print_secrets=True)
         #print_ln("a value now is: %s", a[1].reveal())
         #print_ln("b value now is: %s", b[1].reveal())
@@ -154,7 +157,7 @@ def bench_argmax_fraction(a_values):
 def bench_lts(a,b):
     """Computes the Least Than Secret (LTS) of two values and prints the result."""
     result = SC_fun.LTS(sint(a), sint(b), bit_length)
-
+    
 # create a "tuple" array to encode sequence of gini indes values as fraction values
 a_tuple_array = create_tuple_array(n)
 
@@ -262,7 +265,7 @@ MM  = sint.Tensor([d1, n])
 def _(i):
     #@for_range(l)
     #def _(i):
-    M = MM[i]    
+    M = MM[i]
     M[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
     a_max = bench_argmax(M)
 MM  = sint.Tensor([d2, n])    

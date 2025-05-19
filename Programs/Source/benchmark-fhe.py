@@ -33,7 +33,7 @@ n_threads = 48
 l = 10
 
 # number of elements in each vector
-n = 10
+n = 100
 
 # result
 res = sint.Array(n)
@@ -57,8 +57,8 @@ print('%d-lengthed vectors for argmax in %d threads' % (n, n_threads))
 
 
 
-fprecision = 32
-sfix.set_precision(f=fprecision)
+#fprecision = 32
+#sfix.set_precision(f=fprecision)
 
 def create_tuple_array(n):
     """

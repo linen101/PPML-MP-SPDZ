@@ -1,7 +1,7 @@
 #program.use_edabit(True)
 
 program.set_security(40)
-program.set_bit_length(240)
+program.set_bit_length(120)
 #program.use_trunc_pr = True
 
 import itertools
@@ -18,19 +18,19 @@ from Compiler import SC_fun
 bit_length = program.bit_length
 print_ln("%s-bit_length", bit_length)
 # argmax to be computed in parallel depending on the depth of the tree
-d1 = 100
-d2 = 200
-d3 = 400
-d4 = 800
+d1 = 1
+d2 = 2
+d3 = 4
+d4 = 8
 
-n_threads = 48
+n_threads = 4
 
 # number of rounds estimated for a computation
 # propably not needed
 l = 10
 
 # number of elements in each vector
-n = 100
+n = 10
 
 # result
 res = sint.Array(n)
@@ -191,7 +191,7 @@ a_tuple_array[1][1] = sint(9)
 a_tuple_array[2][0] = sint(4)
 a_tuple_array[2][1] = sint(12)
 """
-
+"""
 # benchmark the argmax operated over fraction values without truncation
 start_timer(6)
 @for_range_opt_multithread(n_threads, d1)
@@ -215,7 +215,7 @@ def _(i):
     #def _(i):
     a_max = bench_argmax_fraction(a_tuple_array)        
 stop_timer(6)
-
+"""
 """
 a_max_fraction = a_max_fraction.reveal()
 a_tuple_array=(a_tuple_array).reveal()
@@ -255,7 +255,7 @@ you need to allocate several matrices before-hand.
 You could allocate MM = sint.Tensor([10, 2, 2]) and 
 then call M = MM[i]inside the loop.
 """
-"""
+#"""
 start_timer(8)
 MM  = sint.Tensor([d1, n])
 @for_range_opt_multithread(n_threads, d1)
@@ -290,7 +290,7 @@ def _(i):
     M[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
     a_max = bench_argmax(M)       
 stop_timer(8)
-"""
+#"""
 
 """
 start_timer(9)

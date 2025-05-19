@@ -18,10 +18,10 @@ from Compiler import SC_fun
 bit_length = program.bit_length
 print_ln("%s-bit_length", bit_length)
 # argmax to be computed in parallel depending on the depth of the tree
-d1 = 1
-d2 = 2
-d3 = 4
-d4 = 8
+d1 = 100
+d2 = 200 
+d3 = 400
+d4 = 800
 
 n_threads = 4
 
@@ -30,7 +30,7 @@ n_threads = 4
 l = 10
 
 # number of elements in each vector
-n = 10
+n = 100
 
 # result
 res = sint.Array(n)

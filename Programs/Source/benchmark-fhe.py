@@ -33,7 +33,7 @@ n_threads = 48
 l = 10
 
 # number of elements in each vector
-n = 100
+n = 12
 
 # result
 res = sint.Array(n)

@@ -25,6 +25,7 @@ d1 = 100
 d2 = 200 
 d3 = 400
 d4 = 800
+d5 = 1600
 
 n_threads = 48
 
@@ -216,7 +217,12 @@ def _(i):
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_max = bench_argmax_fraction(a_tuple_array)        
+    a_max = bench_argmax_fraction(a_tuple_array)  
+@for_range_opt_multithread(n_threads, d5)
+def _(i):
+    #@for_range(l)
+    #def _(i):
+    a_max = bench_argmax_fraction(a_tuple_array)            
 stop_timer(6)
 #"""
 """

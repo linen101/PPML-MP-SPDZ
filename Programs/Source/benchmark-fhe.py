@@ -4,7 +4,7 @@ program.set_security(40)
 
 # set the bit length of the cleartext for the comparisons
 #program.set_bit_length(64)
-program.set_bit_length(120)
+program.set_bit_length(240)
 #program.use_trunc_pr = True
 
 import itertools
@@ -33,7 +33,7 @@ n_threads = 48
 l = 10
 
 # number of elements in each vector
-n = 136
+n = 12
 
 # result
 res = sint.Array(n)
@@ -194,7 +194,7 @@ a_tuple_array[1][1] = sint(9)
 a_tuple_array[2][0] = sint(4)
 a_tuple_array[2][1] = sint(12)
 """
-"""
+#"""
 # benchmark the argmax operated over fraction values without truncation
 start_timer(6)
 @for_range_opt_multithread(n_threads, d1)
@@ -218,7 +218,7 @@ def _(i):
     #def _(i):
     a_max = bench_argmax_fraction(a_tuple_array)        
 stop_timer(6)
-"""
+#"""
 """
 a_max_fraction = a_max_fraction.reveal()
 a_tuple_array=(a_tuple_array).reveal()
@@ -258,7 +258,7 @@ you need to allocate several matrices before-hand.
 You could allocate MM = sint.Tensor([10, 2, 2]) and 
 then call M = MM[i]inside the loop.
 """
-#"""
+"""
 start_timer(8)
 MM  = sint.Tensor([d1, n])
 @for_range_opt_multithread(n_threads, d1)
@@ -293,7 +293,7 @@ def _(i):
     M[:] = a_tuple_array.get_column(0) / a_tuple_array.get_column(1)    
     a_max = bench_argmax(M)       
 stop_timer(8)
-#"""
+"""
 
 """
 start_timer(9)

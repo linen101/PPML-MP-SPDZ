@@ -115,7 +115,8 @@ def argmax_fraction(x):
         # a and b are (index, [numerator, denominator])
         num_a, den_a = a[1]
         num_b, den_b = b[1]
-        comp = (num_a.TruncMul(den_b,32,32) > num_b.TruncMul(den_a,32,32))
+        #comp = (num_a.TruncMul(den_b,32,32) > num_b.TruncMul(den_a,32,32))
+        comp = (num_a * den_b ) > (num_b * den_a )
         #print_ln("index now is: %s", a[0], print_secrets=True)
         #print_ln("a value now is: %s", a[1].reveal())
         #print_ln("b value now is: %s", b[1].reveal())

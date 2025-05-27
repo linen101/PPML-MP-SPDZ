@@ -1,4 +1,4 @@
-#program.use_edabit(True)
+program.use_edabit(True)
 
 program.set_security(40)
 
@@ -25,16 +25,16 @@ d1 = 100
 d2 = 200 
 d3 = 400
 d4 = 800
-#d5 = 1600
+d5 = 1600
 
-n_threads = 24
+n_threads = 48
 
 # number of rounds estimated for a computation
 # propably not needed
 l = 10
 
 # number of elements in each vector
-n = 100
+n = 136
 
 # result
 res = sint.Array(n)
@@ -218,11 +218,11 @@ def _(i):
     #@for_range(l)
     #def _(i):
     a_max = bench_argmax_fraction(a_tuple_array)  
-#@for_range_opt_multithread(n_threads, d5)
-#def _(i):
+@for_range_opt_multithread(n_threads, d5)
+def _(i):
     #@for_range(l)
     #def _(i):
-#    a_max = bench_argmax_fraction(a_tuple_array)            
+    a_max = bench_argmax_fraction(a_tuple_array)            
 stop_timer(6)
 #"""
 """

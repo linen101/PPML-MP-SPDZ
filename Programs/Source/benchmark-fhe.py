@@ -25,7 +25,7 @@ d1 = 100
 d2 = 200 
 d3 = 400
 d4 = 800
-d5 = 1600
+d5 = 0
 
 n_threads = 48
 
@@ -34,7 +34,7 @@ n_threads = 48
 l = 10
 
 # number of elements in each vector
-n = 136
+n = 100
 
 # result
 res = sint.Array(n)

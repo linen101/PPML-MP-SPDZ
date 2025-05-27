@@ -26,7 +26,9 @@ d1 = 100
 d2 = 200 
 d3 = 400
 d4 = 800
+#d5=0
 d5 = 1600
+d6 = 0
 #d6 = 3200
 
 n_threads = 48
@@ -171,7 +173,8 @@ a_tuple_array = create_tuple_array(n)
 """
 start_timer(1)
 (a,b) = create_a_b()  
-stop_timer(1)     
+stop_timer(1)  
+   
 start_timer(2)
 bench_mul(a,b)  
 stop_timer(2)  

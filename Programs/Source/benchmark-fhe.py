@@ -28,8 +28,8 @@ d3 = 400
 d4 = 800
 #d5 = 0
 d5 = 1600
-d6 = 0
-#d6 = 3200
+#d6 = 0
+d6 = 3200
 
 n_threads = 48
 
@@ -38,9 +38,9 @@ n_threads = 48
 l = 10
 
 # number of elements in each vector
-#n = 12
+n = 12
 #n = 40 
-n = 100
+#n = 100
 #n = 136
 
 # result

@@ -4,7 +4,7 @@ program.set_security(40)
 
 # set the bit length of the cleartext for the comparisons
 #program.set_bit_length(64)
-program.set_bit_length(32)
+program.set_bit_length(240)
 # The length 106 is composed as follows: 
 # assuming 64-bit integers, the difference used for comparison is a 65-bit integer, to which 40 bits are added for statistical masking, resulting in a 105 bits, 
 # and it takes a 106-bit prime to able to contain all 105-bit numbers. Finally, the last line indicates which compile-time options would change the program.
@@ -44,8 +44,8 @@ l = 10
 # number of elements in each vector
 #n = 12
 #n = 40 
-#n = 100
-n = 136
+n = 100
+#n = 136
 
 # result
 res = sint.Array(n)

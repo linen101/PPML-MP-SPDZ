@@ -20,12 +20,14 @@ from Compiler import SC_fun
 # Set the bit length based on edabit
 bit_length = program.bit_length
 print_ln("%s-bit_length", bit_length)
+
 # argmax to be computed in parallel depending on the depth of the tree
 d1 = 100
 d2 = 200 
 d3 = 400
 d4 = 800
-d5 = 0
+d5 = 1600
+#d6 = 3200
 
 n_threads = 48
 
@@ -34,7 +36,10 @@ n_threads = 48
 l = 10
 
 # number of elements in each vector
-n = 100
+n = 12
+#n = 40 
+#n = 100
+#n = 136
 
 # result
 res = sint.Array(n)
@@ -223,7 +228,12 @@ def _(i):
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_max = bench_argmax_fraction(a_tuple_array)            
+    a_max = bench_argmax_fraction(a_tuple_array) 
+@for_range_opt_multithread(n_threads, d6)
+def _(i):
+    #@for_range(l)
+    #def _(i):
+    a_max = bench_argmax_fraction(a_tuple_array)               
 stop_timer(6)
 #"""
 """

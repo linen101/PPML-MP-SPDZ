@@ -26,7 +26,7 @@ d1 = 100
 d2 = 200 
 d3 = 400
 d4 = 800
-#d5=0
+#d5 = 0
 d5 = 1600
 d6 = 0
 #d6 = 3200
@@ -39,8 +39,8 @@ l = 10
 
 # number of elements in each vector
 #n = 12
-n = 40 
-#n = 100
+#n = 40 
+n = 100
 #n = 136
 
 # result

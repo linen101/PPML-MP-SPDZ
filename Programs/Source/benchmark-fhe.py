@@ -44,8 +44,8 @@ l = 10
 # number of elements in each vector
 #n = 12
 #n = 40 
-n = 100
-#n = 136
+#n = 100
+n = 136
 
 # result
 res = sint.Array(n)

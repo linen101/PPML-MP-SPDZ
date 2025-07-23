@@ -36,8 +36,8 @@ d3 = 400
 d4 = 800
 #d5 = 0
 d5 = 1600
-d6 = 0
-#d6 = 3200
+#d6 = 0
+d6 = 3200
 
 n_threads = 48
 
@@ -365,6 +365,12 @@ def _(i):
 @for_range_opt_multithread(n_threads, d4*n)
 def _(i):
     compute_gini(a,b,c,d,t)
+@for_range_opt_multithread(n_threads, d5*n)
+def _(i):
+    compute_gini(a,b,c,d,t)
+@for_range_opt_multithread(n_threads, d6*n)
+def _(i):
+    compute_gini(a,b,c,d,t)        
 stop_timer(10)
 
 

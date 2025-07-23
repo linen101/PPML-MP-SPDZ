@@ -36,24 +36,24 @@ d3 = 400
 d4 = 800
 #d5 = 0
 d5 = 1600
-#d6 = 0
-d6 = 3200
+d6 = 0
+#d6 = 3200
 
 n_threads = 48
 
 # number of labels, 
 # needed for the computation of gini
-#t = 2
-t = 3
+t = 2
+#t = 3
 #t = 10
 
 # number of elements in each vector\
     # this captures the different combinations of attributes and attribute values 
     # considered for possible split points.
-#n = 18
-n = 44 
-#n = 108
-#n = 136
+#n = 18             # t = 3
+#n = 44              # t = 3
+n = 108            # t = 2
+#n = 136            # t = 10
 #n = 202
 #n = 2048
 # result

@@ -19,5 +19,8 @@ A clear and concise description of what you expected to happen.
 **Error message**
 Full Python backtrace or virtual machine outputs
 
+**MP-SPDZ version**
+Version or commit you are using
+
 **Additional context**
 Add any other context about the problem here.

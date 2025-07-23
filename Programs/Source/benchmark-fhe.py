@@ -36,8 +36,8 @@ d3 = 400
 d4 = 800
 #d5 = 0
 d5 = 1600
-#d6 = 0
-d6 = 3200
+d6 = 0
+#d6 = 3200
 
 n_threads = 48
 
@@ -51,8 +51,8 @@ t = 3
     # this captures the different combinations of attributes and attribute values 
     # considered for possible split points.
 #n = 18
-n = 44 
-#n = 108
+#n = 44 
+n = 108
 #n = 136
 #n = 202
 #n = 2048

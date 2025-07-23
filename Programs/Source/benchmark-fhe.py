@@ -52,9 +52,9 @@ t = 3
     # considered for possible split points.
 #n = 18
 #n = 44 
-n = 108
+#n = 108
 #n = 136
-#n = 202
+n = 202
 #n = 2048
 # result
 res = sint.Array(n)

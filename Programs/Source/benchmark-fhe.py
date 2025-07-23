@@ -34,25 +34,28 @@ d1 = 100
 d2 = 200 
 d3 = 400
 d4 = 800
-#d5 = 0
-d5 = 1600
-#d6 = 0
-d6 = 3200
+d5 = 0
+#d5 = 1600
+d6 = 0
+#d6 = 3200
 
 n_threads = 48
 
-# number of rounds estimated for a computation
-# propably not needed
-l = 10
+# number of labels, 
+# needed for the computation of gini
+#t = 2
+t = 3
+#t = 10
 
 # number of elements in each vector\
     # this captures the different combinations of attributes and attribute values 
     # considered for possible split points.
-#n = 12
-#n = 40 
-n = 100
+n = 18
+#n = 44 
+#n = 108
 #n = 136
-
+#n = 202
+#n = 2048
 # result
 res = sint.Array(n)
 
@@ -97,12 +100,15 @@ def create_tuple_array(n):
     a_tuple_array = a_tuple_array.transpose()
     return a_tuple_array
 
-def compute_gini(a,b,c,d,l):
+def compute_gini(a,b,c,d,t):
+    c1 = sint(0)
+    d1 = sint(0)
+    #gini = a^2 + b^2 - \sum_{over t} c^2 vals - \sum_{over t} d^2 vals
     @for_range_opt(l)
     def _(j):
-        b.square()
-        d.square()    
-    gini = (a*b + c*d) / a*c
+        c1 = c1 + c.square()
+        d1 = d1 + d.square()    
+    gini = (a + b - c1 - d1)
     return gini
     
 def argmax(x):
@@ -215,38 +221,38 @@ a_tuple_array[2][0] = sint(4)
 a_tuple_array[2][1] = sint(12)
 """
 #"""
-# benchmark the argmax operated over fraction values without truncation
+# benchmark the argmax 
 start_timer(6)
 @for_range_opt_multithread(n_threads, d1)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_max = bench_argmax_fraction(a_tuple_array)
+    a_max = bench_argmax(a_tuple_array)
 @for_range_opt_multithread(n_threads, d2)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_max = bench_argmax_fraction(a_tuple_array)
+    a_max = bench_argmax(a_tuple_array)
 @for_range_opt_multithread(n_threads, d3)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_max = bench_argmax_fraction(a_tuple_array)
+    a_max = bench_argmax(a_tuple_array)
 @for_range_opt_multithread(n_threads, d4)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_max = bench_argmax_fraction(a_tuple_array)  
+    a_max = bench_argmax(a_tuple_array)  
 @for_range_opt_multithread(n_threads, d5)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_max = bench_argmax_fraction(a_tuple_array) 
+    a_max = bench_argmax(a_tuple_array) 
 @for_range_opt_multithread(n_threads, d6)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_max = bench_argmax_fraction(a_tuple_array)               
+    a_max = bench_argmax(a_tuple_array)               
 stop_timer(6)
 #"""
 """
@@ -335,7 +341,7 @@ def _(base, m):
 stop_timer(9)
 """
 # benchmark computation of GINI index with G' formula of overleaf
-"""
+
 start_timer(10)
 a = create_val()
 b = create_val()
@@ -344,16 +350,16 @@ d = create_val()
 
 @for_range_opt_multithread(n_threads, d1*n)
 def _(i):
-    compute_gini(a,b,c,d,l)     
+    compute_gini(a,b,c,d,t)     
 @for_range_opt_multithread(n_threads, d2*n)
 def _(i):
-    compute_gini(a,b,c,d,l)
+    compute_gini(a,b,c,d,t)
 @for_range_opt_multithread(n_threads, d3*n)
 def _(i):
-    compute_gini(a,b,c,d,l)
+    compute_gini(a,b,c,d,t)
 @for_range_opt_multithread(n_threads, d4*n)
 def _(i):
-    compute_gini(a,b,c,d,l)
+    compute_gini(a,b,c,d,t)
 stop_timer(10)
-"""
+
 

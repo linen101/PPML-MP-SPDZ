@@ -25,7 +25,11 @@ from Compiler import SC_fun
 bit_length = program.bit_length
 print_ln("%s-bit_length", bit_length)
 
-# argmax to be computed in parallel depending on the depth of the tree
+# argmax to be computed collaboratively between the servers
+# in parallel, on each tree level 
+# e.g. if we assume 10 servers, each one training 10 decision trees\
+    # then, on the first level d1 = 100 argmaxes can be computed independently, 
+    # and on the second level d2=200 argmaxes in parallel, etc.. 
 d1 = 100
 d2 = 200 
 d3 = 400
@@ -41,7 +45,9 @@ n_threads = 48
 # propably not needed
 l = 10
 
-# number of elements in each vector
+# number of elements in each vector\
+    # this captures the different combinations of attributes and attribute values 
+    # considered for possible split points.
 #n = 12
 #n = 40 
 n = 100

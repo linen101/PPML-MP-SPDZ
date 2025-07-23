@@ -101,14 +101,14 @@ def create_tuple_array(n):
     return a_tuple_array
 
 def compute_gini(a,b,c,d,t):
-    c1 = sint(0)
-    d1 = sint(0)
+    #c1 = sint(0)
+    #d1 = sint(0)
     #gini = a^2 + b^2 - \sum_{over t} c^2 vals - \sum_{over t} d^2 vals
-    @for_range_opt(l)
+    @for_range_opt(t)
     def _(j):
-        c1 = c1 + c.square()
-        d1 = d1 + d.square()    
-    gini = (a + b - c1 - d1)
+        c.square()
+        d.square()    
+    gini = (a + b - c - d)
     return gini
     
 def argmax(x):
@@ -184,7 +184,7 @@ def bench_lts(a,b):
     result = SC_fun.LTS(sint(a), sint(b), bit_length)
     
 # create a "tuple" array to encode sequence of gini indes values as fraction values
-a_tuple_array = create_tuple_array(n)
+#a_tuple_array = create_tuple_array(n)
 
 """
 start_timer(1)
@@ -220,6 +220,11 @@ a_tuple_array[1][1] = sint(9)
 a_tuple_array[2][0] = sint(4)
 a_tuple_array[2][1] = sint(12)
 """
+
+a_array = sint.Array(n)
+a_values = create_a_values(size=n)  
+a_array.assign(a_values)
+
 #"""
 # benchmark the argmax 
 start_timer(6)
@@ -227,32 +232,32 @@ start_timer(6)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_max = bench_argmax(a_tuple_array)
+    a_max = bench_argmax(a_array)
 @for_range_opt_multithread(n_threads, d2)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_max = bench_argmax(a_tuple_array)
+    a_max = bench_argmax(a_array)
 @for_range_opt_multithread(n_threads, d3)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_max = bench_argmax(a_tuple_array)
+    a_max = bench_argmax(a_array)
 @for_range_opt_multithread(n_threads, d4)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_max = bench_argmax(a_tuple_array)  
+    a_max = bench_argmax(a_array)  
 @for_range_opt_multithread(n_threads, d5)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_max = bench_argmax(a_tuple_array) 
+    a_max = bench_argmax(a_array) 
 @for_range_opt_multithread(n_threads, d6)
 def _(i):
     #@for_range(l)
     #def _(i):
-    a_max = bench_argmax(a_tuple_array)               
+    a_max = bench_argmax(a_array)               
 stop_timer(6)
 #"""
 """

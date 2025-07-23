@@ -11,7 +11,7 @@ keys/*
 
 # Personal CONFIG file #
 ##############################
-CONFIG.mine
+#CONFIG.mine
 config_mine.py
 
 # Temporary files #

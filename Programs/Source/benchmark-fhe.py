@@ -34,28 +34,29 @@ d1 = 100
 d2 = 200 
 d3 = 400
 d4 = 800
-#d5 = 0
-d5 = 1600
-#d6 = 0
-d6 = 3200
+d5 = 0
+#d5 = 1600
+d6 = 0
+#d6 = 3200
 
 n_threads = 48
 
 # number of labels, 
 # needed for the computation of gini
-t = 2
+#t = 2
 #t = 3
-#t = 10
+#t = 7
+t = 10
 
 # number of elements in each vector\
     # this captures the different combinations of attributes and attribute values 
     # considered for possible split points.
 #n = 18             # t = 3
 #n = 44              # t = 3
-n = 108            # t = 2
-#n = 136            # t = 10
-#n = 202
-#n = 2048
+#n = 108            # t = 2
+n = 136            # t = 10
+#n = 202            # t = 2
+#n = 2048           # t = 7
 # result
 res = sint.Array(n)
 

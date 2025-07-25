@@ -379,7 +379,8 @@ stop_timer(10)
 #(without FHE, TOTAL IN MPC, n as below) 
 a = create_val()
 b = create_val()
-x = 25200 # iris
+x = 25200  # iris
+x = 119119 # wine
 start_timer(11)
 @for_range_opt_multithread(n_threads, d1*x)
 def _(i):

@@ -6,8 +6,12 @@ Prep-Data/*
 logs/*
 Language-Definition/main.pdf
 keys/*
+
+# my deps
 deps/*
 deps
+deps/libOTe
+deps/libOTe*
 
 # Personal CONFIG file #
 ##############################

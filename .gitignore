@@ -6,8 +6,8 @@ Prep-Data/*
 logs/*
 Language-Definition/main.pdf
 keys/*
-#deps/*
-#deps
+deps/*
+deps
 
 # Personal CONFIG file #
 ##############################
@@ -126,3 +126,7 @@ _build/
 # temp doc files
 doc/readme.md
 doc/xml
+
+#cmake
+cmake-3.24.
+cmake-3.24.1/*

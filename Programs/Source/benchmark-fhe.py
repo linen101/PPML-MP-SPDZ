@@ -45,18 +45,19 @@ n_threads = 48
 # needed for the computation of gini
 #t = 2
 #t = 3
-t = 7
+#t = 7
 #t = 10
 
 # number of elements in each vector\
     # this captures the different combinations of attributes and attribute values 
     # considered for possible split points.
-#n = 18             # t = 3
-#n = 44              # t = 3
+# n = \alpha * \ceil[\sqrt(a)]    
+n = 18              # t = 3
+#n = 44             # t = 3
 #n = 108            # t = 2
 #n = 136            # t = 10
 #n = 202            # t = 2
-n = 2048           # t = 7
+#n = 2048           # t = 7
 # result
 res = sint.Array(n)
 
@@ -76,7 +77,6 @@ except:
     pass
 
 print('%d-lengthed vectors for argmax in %d threads' % (n, n_threads))
-
 
 
 #fprecision = 32
@@ -226,7 +226,7 @@ a_array = sint.Array(n)
 a_values = create_a_values(size=n)  
 a_array.assign(a_values)
 
-#"""
+"""
 # benchmark the argmax 
 start_timer(6)
 @for_range_opt_multithread(n_threads, d1)
@@ -260,7 +260,7 @@ def _(i):
     #def _(i):
     a_max = bench_argmax(a_array)               
 stop_timer(6)
-#"""
+"""
 """
 a_max_fraction = a_max_fraction.reveal()
 a_tuple_array=(a_tuple_array).reveal()
@@ -347,13 +347,14 @@ def _(base, m):
 stop_timer(9)
 """
 # benchmark computation of GINI index with G' formula of overleaf
-
-start_timer(10)
+#(after FHE preprocessing: n as above )
+#(without FHE, TOTAL IN MPC, n as below) 
+"""
 a = create_val()
 b = create_val()
 c = create_val()
 d = create_val()
-
+start_timer(10)
 @for_range_opt_multithread(n_threads, d1*n)
 def _(i):
     compute_gini(a,b,c,d,t)     
@@ -373,5 +374,29 @@ def _(i):
 def _(i):
     compute_gini(a,b,c,d,t)        
 stop_timer(10)
-
-
+"""
+# benchmark computation of GINI index with G' formula of overleaf
+#(without FHE, TOTAL IN MPC, n as below) 
+a = create_val()
+b = create_val()
+x = 25200 # iris
+start_timer(10)
+@for_range_opt_multithread(n_threads, x)
+def _(i):
+    a*b
+@for_range_opt_multithread(n_threads, x)
+def _(i):
+    a*b
+@for_range_opt_multithread(n_threads, x)
+def _(i):
+    a*b
+@for_range_opt_multithread(n_threads, x)
+def _(i):
+    a*b
+@for_range_opt_multithread(n_threads, x)
+def _(i):
+    a*b
+@for_range_opt_multithread(n_threads, x)
+def _(i):
+    a*b        
+stop_timer(10)

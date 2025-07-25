@@ -381,22 +381,22 @@ a = create_val()
 b = create_val()
 x = 25200 # iris
 start_timer(10)
-@for_range_opt_multithread(n_threads, x)
+@for_range_opt_multithread(n_threads, d1*x)
 def _(i):
     a*b
-@for_range_opt_multithread(n_threads, x)
+@for_range_opt_multithread(n_threads, d2*x)
 def _(i):
     a*b
-@for_range_opt_multithread(n_threads, x)
+@for_range_opt_multithread(n_threads, d3*x)
 def _(i):
     a*b
-@for_range_opt_multithread(n_threads, x)
+@for_range_opt_multithread(n_threads, d4*x)
 def _(i):
     a*b
-@for_range_opt_multithread(n_threads, x)
+@for_range_opt_multithread(n_threads, d5*x)
 def _(i):
     a*b
-@for_range_opt_multithread(n_threads, x)
+@for_range_opt_multithread(n_threads, d6*x)
 def _(i):
     a*b        
 stop_timer(10)

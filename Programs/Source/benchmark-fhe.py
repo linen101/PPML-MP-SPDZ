@@ -380,9 +380,9 @@ stop_timer(10)
 a = create_val()
 b = create_val()
 #x = 25200  # iris
-x = 12600 # iris with subset of attributes
+#x = 12600 # iris with subset of attributes
 #x = 119119 # wine
-#x = 36652 # wine with subset of attributes
+x = 36652 # wine with subset of attributes
 
 start_timer(11)
 @for_range_opt_multithread(n_threads, d1*x)

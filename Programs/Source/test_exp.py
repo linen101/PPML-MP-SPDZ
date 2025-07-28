@@ -3,8 +3,12 @@ fprecision = 16
 sfix.set_precision(f=fprecision)
 
 cfix.set_precision(f=fprecision)
+cfix.round_nearest = True
 
-x = sfix(2)
+x = cfix(-15)
 e = cfix(math.e)
-y = e**x
-print_ln('exp(%s)=%s',x.reveal(),y.reveal())
+start_timer(1)
+y = (e**x)
+stop_timer(1)
+print_ln('exp(%s)=%s',x,y.reveal())
+#print_ln(y)

@@ -280,7 +280,7 @@ def bench_naive_participation_set_update(num_players, dataset_length, alpha, bet
     for j in range(num_players):
         # generate random datasets of range [alpha, beta]
         datasets.append(generate_personal_array(j, dataset_length, alpha, beta))
-        residuals_shared = share_personal_matrix(datasets[j], dataset_length, 1) 
+        residuals_shared[j] = share_personal_matrix(datasets[j], dataset_length, 1) 
     stop_timer(i)
     
     quantile = int (dataset_length*num_players / 2)
@@ -288,7 +288,7 @@ def bench_naive_participation_set_update(num_players, dataset_length, alpha, bet
     start_timer(i+1)
     q = median_mpc(num_players=num_players, dataset_length=dataset_length, alpha=alpha, beta=beta, quantile=quantile, datasets=datasets)
     stop_timer(i+1)
-        
+    #q = 0.4 
     start_timer(i+2)
     @for_range_opt(num_players)
     def _(i):

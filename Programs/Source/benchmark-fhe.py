@@ -4,7 +4,7 @@ program.set_security(40)
 
 # set the bit length of the cleartext for the comparisons
 #program.set_bit_length(64)
-program.set_bit_length(240)
+#program.set_bit_length(240)
 # The length 106 is composed as follows: 
 # assuming 64-bit integers, the difference used for comparison is a 65-bit integer, to which 40 bits are added for statistical masking, resulting in a 105 bits, 
 # and it takes a 106-bit prime to able to contain all 105-bit numbers. Finally, the last line indicates which compile-time options would change the program.
@@ -37,7 +37,7 @@ d4 = 800
 #d5 = 0
 d5 = 1600
 #d6 = 0
-d6 = 3200
+#d6 = 3200
 
 n_threads = 48
 
@@ -226,7 +226,7 @@ a_array = sint.Array(n)
 a_values = create_a_values(size=n)  
 a_array.assign(a_values)
 
-#"""
+"""
 # benchmark the argmax 
 start_timer(6)
 @for_range_opt_multithread(n_threads, d1)
@@ -260,7 +260,7 @@ def _(i):
     #def _(i):
     a_max = bench_argmax(a_array)               
 stop_timer(6)
-#"""
+"""
 """
 a_max_fraction = a_max_fraction.reveal()
 a_tuple_array=(a_tuple_array).reveal()
@@ -349,7 +349,7 @@ stop_timer(9)
 # benchmark computation of GINI index with G' formula of overleaf
 #(after FHE preprocessing: n as above )
 #(without FHE, TOTAL IN MPC, n as below) 
-#"""
+"""
 a = create_val()
 b = create_val()
 c = create_val()
@@ -374,11 +374,11 @@ def _(i):
 def _(i):
     compute_gini(a,b,c,d,t)        
 stop_timer(10)
-#"""
+"""
 
 # benchmark computation of GINI index with G' formula of overleaf
 #(without FHE, TOTAL IN MPC, n as below) 
-"""
+#"""
 a = create_val()
 b = create_val()
 #x = 25200  # iris
@@ -406,4 +406,4 @@ def _(i):
 def _(i):
     a*b        
 stop_timer(11)
-"""
+#"""

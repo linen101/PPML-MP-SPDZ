@@ -56,7 +56,7 @@ n = 15              # t = 3
 
 # n = 8 * \ceil[\sqrt(m)] 
 
-
+"""
 try:
     n = int(program.args[1])
 except:
@@ -73,7 +73,20 @@ except:
     pass
 
 print_ln("Compiled with n=%s, t=%s, d=%s", n, t, d)
+"""
 
+try:
+    x = int(program.args[1])
+except:
+    pass
+
+try:
+    d = int(program.args[2])
+except:
+    pass
+
+
+print_ln("Compiled with x=%s, d=%s", x, d)
 if (d==5):
     d5 = 1600
 if (d==6):

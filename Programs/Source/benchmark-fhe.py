@@ -46,7 +46,7 @@ t = 3
     # this captures the different combinations of attributes and attribute values 
     # considered for possible split points.
 # n = \alpha * \ceil[\sqrt(m)]    
-n = 18              # t = 3
+n = 16              # t = 3
 #n = 44             # t = 3
 #n = 108            # t = 2
 #n = 136            # t = 10

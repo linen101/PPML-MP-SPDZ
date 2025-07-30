@@ -123,7 +123,7 @@ a_array = sint.Array(n)
 a_values = create_a_values(size=n)  
 a_array.assign(a_values)
 
-#"""
+"""
 # benchmark the argmax 
 start_timer(1)
 @for_range_opt_multithread(n_threads, d1)
@@ -157,12 +157,12 @@ def _(i):
     #def _(i):
     a_max = bench_argmax(a_array)               
 stop_timer(1)
-#"""
+"""
 
 # benchmark computation of GINI index with G' formula of overleaf
 #(after FHE preprocessing: n as above )
 #(without FHE, TOTAL IN MPC, n as below) 
-#"""
+"""
 a = create_val()
 b = create_val()
 c = create_val()
@@ -187,19 +187,19 @@ def _(i):
 def _(i):
     compute_gini(a,b,c,d,t)        
 stop_timer(2)
-#"""
+"""
 
 # benchmark computation of GINI index with G' formula of overleaf
 #(without FHE, TOTAL IN MPC, n as below) 
-"""
+#"""
 a = create_val()
 b = create_val()
-#x = 25200  # iris
+#x = 25200  # iris, 
 #x = 12600 # iris with subset of attributes
 #x = 119119 # wine
 #x = 36652 # wine with subset of attributes
-x = 1026000 # cancer
-#x = 205200 # wine with subset of attributes
+#x = 1026000 # cancer
+x = 205200 # cancer with subset of attributes
 
 start_timer(3)
 @for_range_opt_multithread(n_threads, d1*x)
@@ -221,4 +221,4 @@ def _(i):
 def _(i):
     bench_mul(a,b)      
 stop_timer(3)
-"""
+#"""

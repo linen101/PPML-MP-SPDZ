@@ -37,10 +37,10 @@ d6 = 0
 n_threads = 48
 
 # number of labels, needed for the computation of gini
-#c = 2
-c = 3
-#c = 7
-#c = 10
+#t = 2
+t = 3
+#t = 7
+#t = 10
 
 # number of elements in each vector\
     # this captures the different combinations of attributes and attribute values 
@@ -63,7 +63,7 @@ except:
     pass
 
 try:
-    c = int(program.args[3])
+    t = int(program.args[3])
 except:
     pass
 
@@ -72,7 +72,7 @@ try:
 except:
     pass
 
-print('%d-lengthed vectors for argmax with %d labels with depth %d' % (n, c, d))
+print('%d-lengthed vectors for argmax with %d labels with depth %d' % (n, t, d))
 
 if (d==5):
     d5 = 1600
@@ -87,7 +87,7 @@ def compute_gini(a,b,c,d,t):
     def _(j):
         c.square()
         d.square()    
-    gini = (a.square + b.square - c - d)
+    gini = (a.square() + b.square() - c - d)
     return gini
     
 def create_a_b():

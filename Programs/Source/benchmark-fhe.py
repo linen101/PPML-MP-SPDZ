@@ -38,7 +38,7 @@ n_threads = 48
 
 # number of labels, needed for the computation of gini
 #c = 2
-c = 3
+t = 3
 #c = 7
 #c = 10
 

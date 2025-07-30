@@ -58,17 +58,17 @@ n = 15              # t = 3
 
 
 try:
-    n = int(program.args[2])
+    n = int(program.args[1])
 except:
     pass
 
 try:
-    t = int(program.args[3])
+    t = int(program.args[2])
 except:
     pass
 
 try:
-    d = int(program.args[4])
+    d = int(program.args[3])
 except:
     pass
 

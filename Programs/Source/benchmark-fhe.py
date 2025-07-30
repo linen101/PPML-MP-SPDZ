@@ -37,22 +37,22 @@ d6 = 0
 n_threads = 48
 
 # number of labels, needed for the computation of gini
-#t = 2
-t = 3
-#t = 7
-#t = 10
+#c = 2
+c = 3
+#c = 7
+#c = 10
 
 # number of elements in each vector\
     # this captures the different combinations of attributes and attribute values 
     # considered for possible split points.
-# n = \alpha * \ceil[\sqrt(a)]    
+# n = \alpha * \ceil[\sqrt(m)]    
 n = 18              # t = 3
 #n = 44             # t = 3
 #n = 108            # t = 2
 #n = 136            # t = 10
 #n = 202            # t = 2
 #n = 2048           # t = 7
-
+# n = 8 * \ceil[\sqrt(m)] 
 # result
 res = sint.Array(n)
 
@@ -62,7 +62,7 @@ except:
     pass
 
 try:
-    t = int(program.args[3])
+    c = int(program.args[3])
 except:
     pass
 
@@ -71,7 +71,7 @@ try:
 except:
     pass
 
-print('%d-lengthed vectors for argmax with %d labels with depth %d' % (n, t, d))
+print('%d-lengthed vectors for argmax with %d labels with depth %d' % (n, c, d))
 
 if (d==5):
     d5 = 1600
@@ -225,7 +225,7 @@ a_array = sint.Array(n)
 a_values = create_a_values(size=n)  
 a_array.assign(a_values)
 
-"""
+#"""
 # benchmark the argmax 
 start_timer(6)
 @for_range_opt_multithread(n_threads, d1)
@@ -259,7 +259,7 @@ def _(i):
     #def _(i):
     a_max = bench_argmax(a_array)               
 stop_timer(6)
-"""
+#"""
 """
 a_max_fraction = a_max_fraction.reveal()
 a_tuple_array=(a_tuple_array).reveal()
@@ -348,7 +348,7 @@ stop_timer(9)
 # benchmark computation of GINI index with G' formula of overleaf
 #(after FHE preprocessing: n as above )
 #(without FHE, TOTAL IN MPC, n as below) 
-"""
+#"""
 a = create_val()
 b = create_val()
 c = create_val()
@@ -373,7 +373,7 @@ def _(i):
 def _(i):
     compute_gini(a,b,c,d,t)        
 stop_timer(10)
-"""
+#"""
 
 # benchmark computation of GINI index with G' formula of overleaf
 #(without FHE, TOTAL IN MPC, n as below) 

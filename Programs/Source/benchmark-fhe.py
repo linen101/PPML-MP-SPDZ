@@ -62,7 +62,7 @@ except:
     pass
 
 try:
-    c = int(program.args[3])
+    t = int(program.args[3])
 except:
     pass
 
@@ -71,7 +71,7 @@ try:
 except:
     pass
 
-print('%d-lengthed vectors for argmax with %d labels with depth %d' % (n, c, d))
+print('%d-lengthed vectors for argmax with %d labels with depth %d' % (n, t, d))
 
 if (d==5):
     d5 = 1600

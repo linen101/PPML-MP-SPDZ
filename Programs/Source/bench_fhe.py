@@ -46,7 +46,7 @@ t = 3
     # this captures the different combinations of attributes and attribute values 
     # considered for possible split points.
 # n = \alpha * \ceil[\sqrt(m)]    
-n = 18              # t = 3
+n = 15              # t = 3
 #n = 44             # t = 3
 #n = 108            # t = 2
 #n = 136            # t = 10
@@ -72,7 +72,7 @@ try:
 except:
     pass
 
-print('%d-lengthed vectors for argmax with %d labels with depth %d' % (n, t, d))
+print_ln("Compiled with n=%s, t=%s, d=%s", n, t, d)
 
 if (d==5):
     d5 = 1600

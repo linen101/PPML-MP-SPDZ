@@ -14,12 +14,14 @@ from Programs.Source import random_matrix
 fprecision = 16
 types.sfix.set_precision(f=fprecision)
 types.cfix.set_precision(f=fprecision)
+#https://mp-spdz.readthedocs.io/en/latest/Compiler.html?highlight=exp#Compiler.mpc_math.exp2_fx
 
 m = 2            
-n_list = [1000]
-alpha =0
-beta =1   
-
+n_list = [100]
+alpha = 0
+beta = 1
+e = cfix(math.e)
+step = 2**(-fprecision)
    
 if len(sys.argv) > 2 and sys.argv[2].isdigit():  
     m = int(sys.argv[2])
@@ -145,11 +147,11 @@ def count_greater_than_m_secretly( dataset, dataset_length, m):
 # for fixed point numbers.
 def median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets):     
     # suggested lower range
-    a = types.Array(fprecision+1,  types.cfix)
+    a = types.Array(2*fprecision+1,  types.cfix)
     # suggested upper range
-    b = types.Array(fprecision+1,  types.cfix)
+    b = types.Array(2*fprecision+1,  types.cfix)
     # suggested median
-    m = types.Array(fprecision+1,  types.cfix)
+    m = types.Array(2*fprecision+1,  types.cfix)
     
     # malicious
     less_to_verify = types.Array(num_players,  types.sint)
@@ -175,6 +177,7 @@ def median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets):
     q = cfix(0)
     @for_range_opt(2*fprecision)
     def _(k):
+        #c=sint()
         # Compute median candidate
         m[k] = cfix((a[k] + b[k]) / 2)
         q.update(m[k])
@@ -190,11 +193,12 @@ def median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets):
             
             # secret share the personal less than result of player i.
             less_shared = sint(less)
-            print_ln("Smaller than values of player %s : %s",i, less_shared.reveal()) 
+            
+            #print_ln("Smaller than values of player %s : %s",i, less_shared.reveal()) 
             
             # secret share the personal greater than result of player i.
             greater_shared = sint(greater)
-            print_ln("Greater than values of player %s: %s", i, greater_shared.reveal())
+            #print_ln("Greater than values of player %s: %s", i, greater_shared.reveal())
             
             # update the arrays to keep the secret-shared results.
             less_shared_array[i] = less_shared
@@ -265,6 +269,125 @@ quantile = int (dataset_length*num_players / 2)
 q = median_mpc(num_players=num_players, dataset_length=dataset_length, alpha=0, beta=1, quantile= quantile)      
 #print_ln("%s Quantile value is: %s", quantile, q)  
 """   
+
+### implement median mpc from 
+# Secure Computation of the kth-Ranked Element
+# for fixed point numbers.
+def dp_median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets):     
+    # suggested lower range
+    a = types.Array(2*fprecision+1,  types.cfix)
+    # suggested upper range
+    b = types.Array(2*fprecision+1,  types.cfix)
+    # suggested median
+    m = types.Array(2*fprecision+1,  types.cfix)
+    
+    # malicious
+    less_to_verify = types.Array(num_players,  types.sint)
+    less_to_verify.assign_all(0)
+    greater_to_verify = types.Array(num_players,  types.sint)
+    greater_to_verify.assign_all(0)
+    
+    # party i shares the result
+    less_shared_array = types.Array(num_players,  types.sint)
+    greater_shared_array = types.Array(num_players,  types.sint)
+      
+    # set possible k-th quantile value m for 1st round
+    a[0] = cfix(alpha)
+    b[0] = cfix(beta)
+    
+    # Initialize return value
+    q = cfix(0)
+    @for_range_opt(2*fprecision)
+    def _(k):
+        #c=sint()
+        # Compute median candidate
+        m[k] = cfix((a[k] + b[k]) / 2)
+        q.update(m[k])
+        print_ln("Iteration %s: a = %s, b = %s, m = %s", k, a[k], b[k], m[k])
+        sum_less_shared = sint(0)
+        sum_greater_shared = sint(0)
+        
+        for i in range(num_players):
+            # count elements in the database of player i smaller than m
+            less = count_smaller_than_m(player=i, dataset=datasets[i], dataset_length=dataset_length, m=m[k])
+            # count elements in the database of player i smaller than m
+            greater = count_greater_than_m(player=i, dataset=datasets[i], dataset_length=dataset_length, m=m[k])
+            
+            # secret share the personal less than result of player i.
+            less_shared = sint(less)
+            #print_ln("Smaller than values of player %s : %s",i, less_shared.reveal()) 
+            
+            # secret share the personal greater than result of player i.
+            greater_shared = sint(greater)
+            #print_ln("Greater than values of player %s: %s", i, greater_shared.reveal())
+            
+            # update the arrays to keep the secret-shared results.
+            less_shared_array[i] = less_shared
+            greater_shared_array[i] = greater_shared 
+
+            # compute sums
+            sum_less_shared = less_shared + sum_less_shared
+            sum_greater_shared = greater_shared + sum_greater_shared
+
+        # Number of total elements
+        n = dataset_length * num_players
+        
+        # MALICIOUS CHECK
+        for i in range(num_players):  
+            cond = (less_shared_array[i] + greater_shared_array[i]) <= dataset_length  
+            library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
+            cond = (less_shared_array[i] >= less_to_verify[i]) 
+            library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
+            cond = (greater_shared_array[i] >= greater_to_verify[i]) 
+            library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
+        
+        # Print sums
+        #print_ln("Sum of Smaller than values: %s", sum_less_shared.reveal())         
+        w_a = sfix(1)
+        w_b = sfix(1)
+        
+        #compute weights
+        x = sum_less_shared - quantile
+        #print_ln('utility is: %s', x.reveal())
+        x_abs = abs(x)
+        x_exp = sfix(-x_abs)
+        c1 =  x_abs - 12
+        cond1 = c1 < 0
+        e_x = cond1.if_else(e**x_exp, 0)
+        #print_ln('exp(%s)=%s',x_exp.reveal() ,e_x.reveal())
+        
+        c = x < 0
+        w_a = c.if_else(e_x, 1)
+        w_b = c.if_else(1, e_x)
+                
+    
+        # Update a and b based on the weights
+        w_total = w_a + w_b
+        t = sfix.get_random(0,1)
+        #print_ln("t is : %s",t.reveal())
+        w_total_random = w_total*t
+        cond = w_a < w_total_random
+        cond = cond.reveal()
+        @if_(cond==1)
+        def _():
+            a[k+1] = m[k] + step
+            b[k+1] = b[k]
+            for i in range(num_players):
+                less_to_verify[i] = dataset_length - greater_shared_array[i]          
+        @if_(cond==0)
+        def _():
+            a[k+1] = a[k]
+            b[k+1] = m[k] -step  
+            for i in range(num_players):
+                greater_to_verify[i] = dataset_length - less_shared_array[i]
+        # Termination condition (median found)
+        @if_( (b[k+1]==a[k+1]) )
+        def _():
+            print_ln("Median found: %s",a[k+1])
+            q.update(a[k+1])
+            break_loop()        
+    return q 
+
 
 def bench_naive_participation_set_update(num_players, dataset_length, alpha, beta):            
     # Matrix containing the residual errors of each party
@@ -348,18 +471,24 @@ def bench_median_mpc(n_list, m, alpha, beta):
         for j in range(m):
             # generate random datasets of range [alpha, beta]
             #datasets[j] = generate_personal_array(j, n, alpha, beta)
-            personal_array = generate_personal_array(j, n, alpha, beta)
+            personal_array = generate_personal_array(j, n, -(alpha+10*j), beta+10*j)
             datasets.append(personal_array)
             
-        quantile = int (n*m / 2)
+        quantile = int (n*m *0.5)
         
         start_timer(i)
-        q = median_mpc(num_players=m, dataset_length=n, alpha=alpha, beta=beta, quantile=quantile, datasets=datasets)
+        q = dp_median_mpc(num_players=m, dataset_length=n, alpha=-alpha-10*m, beta=beta+10*m, quantile=quantile, datasets=datasets)
+        print_ln("%s DP Quantile value is: %s", quantile, q)  
         stop_timer(i)  
         
-        i = i + 1
+        start_timer(i+1)
+        q = median_mpc(num_players=m, dataset_length=n, alpha=-alpha-10*m, beta=beta+10*m, quantile=quantile, datasets=datasets)
+        print_ln("%s DP Quantile value is: %s", quantile, q)  
+        stop_timer(i+1)  
+        
+        i = i + 2
 
        
 #bench_participation_set_update(n_list, m, alpha, beta)        
-#bench_median_mpc(n_list, m, alpha, beta)
-bench_naive_participation_set_update(num_players=2, dataset_length=10, alpha=0, beta=1)
+bench_median_mpc(n_list, m, alpha, beta)
+#bench_naive_participation_set_update(num_players=2, dataset_length=10, alpha=0, beta=1)

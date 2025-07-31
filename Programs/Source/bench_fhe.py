@@ -12,7 +12,7 @@ from Compiler import SC_fun
 program.set_security(40)
 
 # set the bit length of the cleartext for the comparisons
-program.set_bit_length(240)
+program.set_bit_length(64)
 
 # Set the bit length based on edabit
 bit_length = program.bit_length
@@ -53,7 +53,7 @@ n = 15              # t = 3
 #n = 202            # t = 2
 #n = 2048           # t = 7
 
-
+x=12600
 # n = 8 * \ceil[\sqrt(m)] 
 
 """
@@ -131,12 +131,12 @@ def bench_argmax(a_values):
     a_max = ml.argmax(a_values)  
     return a_max    
 
-
+"""
 a_array = sint.Array(n)
 a_values = create_a_values(size=n)  
 a_array.assign(a_values)
 
-"""
+
 # benchmark the argmax 
 start_timer(1)
 @for_range_opt_multithread(n_threads, d1)
@@ -202,36 +202,12 @@ def _(i):
 stop_timer(2)
 """
 
-# benchmark computation of GINI index with G' formula of overleaf
-#(without FHE, TOTAL IN MPC, n as below) 
-#"""
-a = create_val()
-b = create_val()
-#x = 25200  # iris, 
-#x = 12600 # iris with subset of attributes
-#x = 119119 # wine
-#x = 36652 # wine with subset of attributes
-#x = 1026000 # cancer
-x = 205200 # cancer with subset of attributes
-
-start_timer(3)
-@for_range_opt_multithread(n_threads, d1*x)
+a_array = sint.Array(t)
+a_values = create_a_values(size=t)  
+a_array.assign(a_values)
+#gini for the leaves
+start_timer(4)
+@for_range_opt_multithread(n_threads, 2**d)
 def _(i):
-    bench_mul(a,b)
-@for_range_opt_multithread(n_threads, d2*x)
-def _(i):
-    bench_mul(a,b)
-@for_range_opt_multithread(n_threads, d3*x)
-def _(i):
-    bench_mul(a,b)
-@for_range_opt_multithread(n_threads, d4*x)
-def _(i):
-    bench_mul(a,b)
-@for_range_opt_multithread(n_threads, d5*x)
-def _(i):
-    bench_mul(a,b)
-@for_range_opt_multithread(n_threads, d6*x)
-def _(i):
-    bench_mul(a,b)      
-stop_timer(3)
-#"""
+    bench_argmax(a_array)
+stop_timer(4)    

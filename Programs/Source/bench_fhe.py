@@ -129,7 +129,12 @@ def bench_comp(a,b):
     
 def bench_argmax(a_values):
     a_max = ml.argmax(a_values)  
-    return a_max    
+    return a_max.reveal()    
+
+def bench_argmax(a_values):
+    a_max = ml.argmax(a_values)  
+    idx = a_max.reveal()   
+    return a_values[idx].reveal()
 
 """
 a_array = sint.Array(n)
@@ -201,6 +206,7 @@ def _(i):
     compute_gini(a,b,c,d,t)        
 stop_timer(2)
 """
+
 
 a_array = sint.Array(t)
 a_values = create_a_values(size=t)  

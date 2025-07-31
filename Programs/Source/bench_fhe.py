@@ -131,7 +131,7 @@ def bench_argmax(a_values):
     a_max = ml.argmax(a_values)  
     return a_max.reveal()    
 
-def bench_argmax(a_values):
+def bench_max(a_values):
     a_max = ml.argmax(a_values)  
     idx = a_max.reveal()   
     return a_values[idx].reveal()
@@ -211,9 +211,9 @@ stop_timer(2)
 a_array = sint.Array(t)
 a_values = create_a_values(size=t)  
 a_array.assign(a_values)
-#gini for the leaves
+#label for the leaves
 start_timer(4)
 @for_range_opt_multithread(n_threads, 2**d)
 def _(i):
-    bench_argmax(a_array)
+    bench_max(a_array)
 stop_timer(4)    

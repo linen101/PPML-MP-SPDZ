@@ -464,15 +464,15 @@ def model_reveal(n, d, alpha, beta):
 
 def participation_set_update(n, m, alpha, beta):
     i=40
-    datasets = np.empty(m, dtype=object) 
-    active_sets = np.empty(m, dtype=object) 
+    datasets = []
+    active_sets = []
     # measure the time needed in MPC for Π_{qrankMPC}
     # generate sorted datasets 
     # for benchmark puproses only (not secure)
     start_timer(i)
     for j in range(m):
         # generate random datasets of range [alpha, beta]
-        datasets[j] = generate_personal_array(j, n, alpha, beta)
+        datasets.append(generate_personal_array(j, n, alpha, beta))
         share_personal_matrix(datasets[j], n, 1) 
         # print values for testing
         #for j in range(dataset_length):
@@ -488,7 +488,7 @@ def participation_set_update(n, m, alpha, beta):
     #start_timer(i+2)
     for j in range(m):
         # generate random datasets of range [alpha, beta]
-        active_sets[j] = generate_personal_array(j, n, alpha, beta)
+        active_sets.append(generate_personal_array(j, n, alpha, beta))
         share_personal_matrix(active_sets[j], n, 1) 
     stop_timer(i)
     #stop_timer(i+2)    

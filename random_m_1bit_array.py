@@ -6,7 +6,7 @@ program.set_security(40)
 def get_random_bits_with_sum(n, m):
     assert m <= n
     
-    bits = types.Array(n, types.cint)
+    bits = types.Array(n, types.sint)
     @for_range_opt(m)
     def _(i):
         bits[i] = 1
@@ -15,6 +15,7 @@ def get_random_bits_with_sum(n, m):
     def _(i):
         bits[i] = 0   
     bits.shuffle()
+    bits.reveal()
     return bits
 
-bits = get_random_bits_with_sum(16,4)
+bits = get_random_bits_with_sum(64,4)

@@ -2,7 +2,7 @@
 #import matplotlib.pyplot as plt
 #import numpy as np
 import itertools
-import random
+#import random
 import math
 
 from Compiler import types, library, instructions
@@ -10,7 +10,7 @@ from Compiler.types import sfix, sint, cfix, cint, Matrix, Array, personal
 from Compiler import comparison, util
 from Compiler import ml
 from Programs.Source import random_matrix
-from Compiler.library import start_timer, stop_timer, for_range_opt, print_ln, if_, break_loop
+from Compiler.library import start_timer, stop_timer, for_range_opt, print_ln, if_, break_loop, MemValue
 fprecision = 16
 types.sfix.set_precision(f=fprecision)
 types.cfix.set_precision(f=fprecision)
@@ -33,7 +33,8 @@ def generate_personal_array(player, length, alpha, beta):
     array_a = types.personal(player, Array(length, types.cfix))
     @for_range_opt(length)
     def _(i):
-        value = random.uniform(alpha, beta)
+        #value = random.uniform(alpha, beta)
+        value = cint(42)/cint(i)
         value_cfix =  types.cfix(value)
         array_a[i] = value_cfix
     return array_a 
@@ -45,7 +46,8 @@ def generate_personal_matrix(player, n, d, alpha, beta):
         @for_range_opt(d)
         def _(j):
             # not secure for benchmark puproses only
-            value = random.uniform(alpha, beta)
+            #value = random.uniform(alpha, beta)
+            value = cint(42)/cint(i)
             value_cfix =  types.cfix(value)
             matrix_a[i][j] = value_cfix
     return matrix_a  
@@ -67,7 +69,8 @@ def generate_random_shared_matrix(n, d, alpha, beta):
     def _(i):
         @for_range_opt(d)
         def _(j):
-            value = random.uniform(alpha, beta)
+            #value = random.uniform(alpha, beta)
+            value = cint(42)/cint(i)
             value_sfix =  types.sfix(value)
             matrix_a[i][j] = value_sfix
     return matrix_a  
@@ -75,10 +78,13 @@ def generate_random_shared_matrix(n, d, alpha, beta):
 ###   Generate a diagonal matrix with random uniform values for a player ###
 def generate_epsilon_matrix(n, alpha, beta):
     matrix_a = types.Matrix(n, n, types.cfix)
-    for i in range(n):
-        for j in range(n):
+    @for_range_opt(n)
+    def _(i):
+        @for_range_opt(d)
+        def _(j):
             if i == j:  # Only set diagonal elements
-                value = random.uniform(alpha, beta)
+                #value = random.uniform(alpha, beta)
+                value = cint(42)/cint(i)
                 value_cfix = types.cfix(1- value)
                 matrix_a[i][j] = value_cfix
             else:
@@ -89,8 +95,12 @@ def count_smaller_than_m(player, dataset, dataset_length, m):
     # element-wise comparison (A < m)
     comparison_results = types.personal(player, Array(dataset_length, types.cint))
     count = types.personal(player, cint(0))
+    #MemValue(count)
+    #c = types.personal(player, Array(dataset_length, types.cint))
+    #c = dataset[:] < m
+    #sc[:] = (dataset[:] < m) 
     for i in range(dataset_length):
-    #def _(i):
+        #def _(i):
         c = (dataset[i] < m) + cint(0)
         count = count + c
     # Sum the binary results to count

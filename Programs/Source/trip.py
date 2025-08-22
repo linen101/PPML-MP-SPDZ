@@ -1,6 +1,6 @@
 #program.use_edabit(True)
 #import matplotlib.pyplot as plt
-import numpy as np
+#import numpy as np
 import itertools
 import random
 import math

@@ -12,16 +12,13 @@ fprecision = 16
 types.sfix.set_precision(f=fprecision)
 types.cfix.set_precision(f=fprecision)
 
-def range_check_array(size, B):
-    matrix_result = generate_random_shared_array(size, alpha=0, beta=1)
-    result = (matrix_result[:]< B )  
+def range_check_array(matrixy, B):
+    result = (matrixy[:]< B )  
     result.reveal()
   
 
-def range_check_matrix(size, B):
-    matrix_result = generate_random_shared_matrix(size, alpha=0, beta=1)
-
-    result = (matrix_result[:][:] < q )  
+def range_check_matrix(matrixy, B):
+    result = (matrixy[:][:] < q )  
     result.reveal()
   
 def inverse_check(size, epsilon=0.0001):
@@ -45,8 +42,8 @@ def initial_input_commitment_proofs(n, d, alpha, beta, m, B):
         matrix_sxit = share_personal_matrix(matrix_sit, d, 1) 
         matrix_sy = share_personal_matrix(matrix_syr, n, 1)
         BX =  mat_prod(a=matrix_sxi, b=matrix_sxit)
-        range_check_array(size=n, B=B)
-        range_check_array(size=n, B=B)
+        range_check_array(matrix_sy, B=B)
+        range_check_array(matrix_sy, B=B)
     stop_timer(i)    
             
 def model_input_commitment_proofs(n, d, alpha, beta, m):

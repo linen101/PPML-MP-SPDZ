@@ -34,23 +34,24 @@ def inverse_check(size, epsilon=0.0001):
 
 def initial_input_commitment_proofs(n, d, alpha, beta, m, B):
     i=10  
-    # X_i rows are needed to check bounds.
-    matrix_si = generate_personal_matrix(0,1, d, alpha, beta)
-    matrix_sit = generate_personal_matrix(0, d, 1, alpha, beta)
-    matrix_syr = generate_personal_array(0, n, alpha, beta)
     matrix_sxi = types.Matrix(1, d, sfix)
     matrix_sxit = types.Matrix(d, 1, sfix)
     start_timer(i)     
-    @for_range_opt(m)
-    def _(k):
+    # X_i rows are needed to check bounds.
+    for j in range(m):
+        matrix_si = generate_personal_matrix(j, 1, d, alpha, beta)
+        matrix_sit = generate_personal_matrix(j, d, 1, alpha, beta)
+        matrix_syr = generate_personal_array(j, n, alpha, beta)
+    #@for_range_opt(m)
+    #def _(k):
         @for_range_opt(n)
         def _(l):
             matrix_sxi = share_personal_matrix(matrix_si, 1, d)
             matrix_sxit = share_personal_matrix(matrix_sit, d, 1 ) 
-        print_ln("finished with sharing")     
         matrix_sy = share_personal_array(matrix_syr, n)    
         range_check_array(matrix_sy, B=B)
         range_check_array(matrix_sy, B=B)
+    print_ln("finished with sharing")         
     @for_range_opt_multithread(n_threads, m)
     def _(k):
         BX =  mat_prod(matrix_sxi, matrix_sxit)    
@@ -64,13 +65,14 @@ def model_input_commitment_proofs(n, d, alpha, beta, m):
     matrix_sb = types.Matrix(n, 1, sfix)
     matrix_sc = types.Matrix(1, d, sfix)
     matrix_sd = types.Matrix(d, 1, sfix)
-    matrix_sar = generate_personal_matrix(0, 1, n, alpha, beta)
-    matrix_sbr = generate_personal_matrix(0, n, 1, alpha, beta)
-    matrix_scr = generate_personal_matrix(0, 1, d, alpha, beta)
-    matrix_sdr = generate_personal_matrix(0, d, 1, alpha, beta)
     start_timer(i)
-    @for_range_opt(m)
-    def _(k):
+    for j in range(m):
+        matrix_sar = generate_personal_matrix(j, 1, n, alpha, beta)
+        matrix_sbr = generate_personal_matrix(j, n, 1, alpha, beta)
+        matrix_scr = generate_personal_matrix(j, 1, d, alpha, beta)
+        matrix_sdr = generate_personal_matrix(j, d, 1, alpha, beta)
+    #@for_range_opt(m)
+    #def _(k):
         matrix_sa = share_personal_matrix(matrix_sar, 1, n)
         matrix_sb = share_personal_matrix(matrix_sbr, n, 1)
         matrix_sc = share_personal_matrix(matrix_scr, 1, d)

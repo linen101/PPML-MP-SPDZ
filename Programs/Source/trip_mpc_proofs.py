@@ -85,7 +85,7 @@ def model_input_commitment_proofs(n, d, alpha, beta, m):
         Ciii = mat_prod(a=matrix_sa, b=matrix_sb)
                 
         D = mat_prod(a=matrix_sc, b=matrix_sd)    
-        inverse_check(size=d)    
+        inverse_check(size=1)    
     stop_timer(i)        
 
 def participation_set_update_proofs(n, m, alpha, beta):

@@ -11,9 +11,9 @@ from Programs.Source import random_matrix
 from Programs.Source.trip import *
 import sys
 # Default values (optional)
-m = 3  # Number of parties
-n = 10  # Number of samples
-d = 3  # Number of features
+m = 2  # Number of parties
+n = 5  # Number of samples
+d = 1  # Number of features
 
 
 # Parse arguments only when running (not compiling)

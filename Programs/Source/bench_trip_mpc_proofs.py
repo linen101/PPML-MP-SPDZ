@@ -11,9 +11,9 @@ from Programs.Source import random_matrix
 from Programs.Source.trip_mpc_proofs import *
 
 # Default values (optional)
-m = 3  # Number of parties
-n = 500  # Number of samples
-d = 100  # Number of features
+m = 2  # Number of parties
+n = 5  # Number of samples
+d = 1  # Number of features
 
 # Parse arguments only when running (not compiling)
    

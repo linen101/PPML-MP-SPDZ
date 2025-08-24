@@ -18,7 +18,7 @@ def range_check_array(matrixy, B):
   
 
 def range_check_matrix(matrixy, B):
-    result = (matrixy[:][:] < q )  
+    result = (matrixy[:][:] < B )  
     result.reveal()
   
 def inverse_check(size, epsilon=0.0001):
@@ -30,17 +30,21 @@ def inverse_check(size, epsilon=0.0001):
             result = (matrix_result[i][j] < epsilon )  
             result.reveal()
 
+
 def initial_input_commitment_proofs(n, d, alpha, beta, m, B):
     i=10  
-    start_timer(i)
     # X_i rows are needed to check bounds.
     for j in range(m): 
         matrix_si = generate_personal_matrix(j, 1, d, alpha, beta)
         matrix_sit = generate_personal_matrix(j, d, 1, alpha, beta)
-        matrix_syr = generate_personal_matrix(j, n, 1, alpha, beta) 
+        matrix_syr = generate_personal_matrix(j, n, 1, alpha, beta)
+    start_timer(i)     
+    @for_range_opt(m)
+    def _(k):
         matrix_sxi = share_personal_matrix(matrix_si, 1, d)
         matrix_sxit = share_personal_matrix(matrix_sit, d, 1) 
         matrix_sy = share_personal_matrix(matrix_syr, n, 1)
+        print_ln("finished with sharing") 
         BX =  mat_prod(a=matrix_sxi, b=matrix_sxit)
         range_check_array(matrix_sy, B=B)
         range_check_array(matrix_sy, B=B)
@@ -48,7 +52,6 @@ def initial_input_commitment_proofs(n, d, alpha, beta, m, B):
             
 def model_input_commitment_proofs(n, d, alpha, beta, m):
     i=20
-    start_timer(i)
     # measure overhead of sharing personal matrix
     # has been computed in model_input_commitment of trip
 
@@ -57,13 +60,16 @@ def model_input_commitment_proofs(n, d, alpha, beta, m):
         matrix_sbr = generate_personal_matrix(j, n, 1, alpha, beta)
         matrix_scr = generate_personal_matrix(j, 1, d, alpha, beta)
         matrix_sdr = generate_personal_matrix(j, d, 1, alpha, beta)
+    start_timer(i)
+    @for_range_opt(m)
+    def _(k):
         matrix_sa = share_personal_matrix(matrix_sar, 1, n)
         matrix_sb = share_personal_matrix(matrix_sbr, n, 1)
         matrix_sc = share_personal_matrix(matrix_scr, 1, d)
         matrix_sd = share_personal_matrix(matrix_sdr, d, 1)
-        @for_range_opt(3)
-        def _(i):
-            C = mat_prod(a=matrix_sa, b=matrix_sb)
+        Ci = mat_prod(a=matrix_sa, b=matrix_sb)
+        Ci = mat_prod(a=matrix_sa, b=matrix_sb)
+        Ciii = mat_prod(a=matrix_sa, b=matrix_sb)
                 
         D = mat_prod(a=matrix_sc, b=matrix_sd)    
         inverse_check(size=d)    

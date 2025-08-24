@@ -40,11 +40,11 @@ def inverse_check(size, epsilon=0.0001):
 
 def initial_input_commitment_proofs(n, d, alpha, beta, m, B):
     i=10  
+    start_timer(i)
     # X_i rows are needed to check bounds.
     matrix_sxi = generate_random_shared_matrix(1, d, alpha, beta)
     matrix_sxit = generate_random_shared_matrix(d, 1, alpha, beta)
     matrix_sy = generate_random_shared_matrix(n, 1, alpha, beta)  
-    start_timer(i)
     @for_range_opt(m)
     def _(j): 
         @for_range_opt(n)
@@ -56,13 +56,13 @@ def initial_input_commitment_proofs(n, d, alpha, beta, m, B):
             
 def model_input_commitment_proofs(n, d, alpha, beta, m):
     i=20
+    start_timer(i)
     # measure overhead of sharing personal matrix
     # has been computed in model_input_commitment of trip
     matrix_sa = generate_random_shared_matrix(1, n, alpha, beta)
     matrix_sb = generate_random_shared_matrix(n, 1, alpha, beta)
     matrix_sc = generate_random_shared_matrix(1, d, alpha, beta)
     matrix_sd = generate_random_shared_matrix(d, 1, alpha, beta)
-    start_timer(i)
     @for_range_opt(m)
     def _(j):
         @for_range_opt(3)

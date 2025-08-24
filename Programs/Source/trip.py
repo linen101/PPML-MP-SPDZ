@@ -75,20 +75,24 @@ def generate_random_shared_matrix(n, d, alpha, beta):
             matrix_a[i][j] = value_sfix
     return matrix_a  
 
+def generate_random_shared_array(n, alpha, beta):
+    # Set global precision for sfix...
+    matrix_a = types.Array(n, types.sfix)
+    @for_range_opt(n)
+    def _(i):
+        #value = random.uniform(alpha, beta)
+        value = cint(42)/cint(i)
+        value_sfix =  types.sfix(value)
+        matrix_a[i] = value_sfix
+    return matrix_a
+
 ###   Generate a diagonal matrix with random uniform values for a player ###
 def generate_epsilon_matrix(n, alpha, beta):
     matrix_a = types.Matrix(n, n, types.cfix)
+    matrix_a.assign_all(0)
     @for_range_opt(n)
     def _(i):
-        @for_range_opt(d)
-        def _(j):
-            if i == j:  # Only set diagonal elements
-                #value = random.uniform(alpha, beta)
-                value = cint(42)/cint(i)
-                value_cfix = types.cfix(1- value)
-                matrix_a[i][j] = value_cfix
-            else:
-                matrix_a[i][j] = types.cfix(0- value)  # Off-diagonal elements set to zero
+        matrix_a[i][i] = cfix(1)
     return matrix_a
 
 def count_smaller_than_m(player, dataset, dataset_length, m):
@@ -140,7 +144,7 @@ def count_greater_than_m_secretly( dataset, dataset_length, m):
 ### implement median mpc from:
 # Secure Computation of the kth-Ranked Element
 # for fixed point numbers.
-def median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets):  
+def median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets, mal_flag=0):  
     # datasets will store all the personal datasets in one place  
     # suggested lower range
     a = types.Array(fprecision+1,  types.cfix)
@@ -203,14 +207,12 @@ def median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets):
             sum_greater_shared = greater_shared + sum_greater_shared
            
             # verify input in the protocol
-            #@if_(k==0)
-            #def _():
-            #    start_timer(2)
-            #    greater_shared_malicious[i] = count_greater_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
-            #    less_shared_malicious[i] = count_smaller_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
-            #    cond = (less_shared_array[i] == less_shared_malicious[i]) 
-            #    library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
-            #    stop_timer(2)
+            @if_(k==0 & mal_flag==1)
+            def _():
+                greater_shared_malicious[i] = count_greater_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
+                less_shared_malicious[i] = count_smaller_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
+                cond = (less_shared_array[i] == less_shared_malicious[i]) 
+                library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
 
         # Number of total elements
         n = dataset_length * num_players
@@ -263,7 +265,7 @@ quantile = int (dataset_length*num_players / 2)
 q = median_mpc(num_players=num_players, dataset_length=dataset_length, alpha=0, beta=1, quantile= quantile)      
 #print_ln("%s Quantile value is: %s", quantile, q)  
 """   
-def dp_median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets): 
+def dp_median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets, mal_flag=0): 
     e = cfix(math.e)
     step = 2**(-fprecision)    
     # suggested lower range
@@ -320,6 +322,20 @@ def dp_median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets):
             # compute sums
             sum_less_shared = less_shared + sum_less_shared
             sum_greater_shared = greater_shared + sum_greater_shared
+
+            # verify input in the protocol
+            @if_(k==0 & mal_flag)
+            def _():
+                # parties compute the result in mpc
+                less_shared_malicious = types.Array(num_players,  types.sint)
+                less_shared_malicious.assign_all(0)
+                greater_shared_malicious = types.Array(num_players,  types.sint)
+                greater_shared_malicious.assign_all(0)
+      
+                greater_shared_malicious[i] = count_greater_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
+                less_shared_malicious[i] = count_smaller_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
+                cond = (less_shared_array[i] == less_shared_malicious[i]) 
+                library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
 
         # Number of total elements
         n = dataset_length * num_players

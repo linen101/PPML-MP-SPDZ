@@ -100,15 +100,17 @@ def count_smaller_than_m(player, dataset, dataset_length, m):
     comparison_results = types.personal(player, Array(dataset_length, types.cint))
     count = types.personal(player, cint(0))
     #MemValue(count)
-    #c = types.personal(player, Array(dataset_length, types.cint))
-    #c = dataset[:] < m
-    #sc[:] = (dataset[:] < m) 
+    c = types.personal(player, Array(dataset_length, types.cint))
+    b = types.Array(dataset_length, types.cint)
+    b.assign_all(1)
+    c[:] = b[:]
+    comparison_results = dataset[:] < m
     for i in range(dataset_length):
         #def _(i):
-        c = (dataset[i] < m) + cint(0)
-        count = count + c
+        #c = (dataset[i] < m) + cint(0)
+        count + comparison_results[i]
     # Sum the binary results to count
-    return count
+    #return count
 
 def count_greater_than_m(player, dataset, dataset_length, m):
     # element-wise comparison (A < m)

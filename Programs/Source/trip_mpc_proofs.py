@@ -44,6 +44,7 @@ def initial_input_commitment_proofs(n, d, alpha, beta, m, B):
     matrix_sxi = generate_random_shared_matrix(1, d, alpha, beta)
     matrix_sxit = generate_random_shared_matrix(d, 1, alpha, beta)
     matrix_sy = generate_random_shared_matrix(n, 1, alpha, beta)  
+    start_timer(i)
     @for_range_opt(m)
     def _(j): 
         @for_range_opt(n)
@@ -51,6 +52,7 @@ def initial_input_commitment_proofs(n, d, alpha, beta, m, B):
             BX =  mat_prod(a=matrix_sxi, b=matrix_sxit)
             range_check_array(size=n, B=B)
         range_check_array(size=n, B=B)
+    stop_timer(i)    
             
 def model_input_commitment_proofs(n, d, alpha, beta, m):
     i=20
@@ -97,6 +99,7 @@ def participation_set_update_proofs(n, m, alpha, beta):
     #@for_range_opt(num_players)
     #def _(i):
     #    # Generate a secure random dataset for each player
-    #    active_sets_shared[i].reveal_to(i)         
+    #    active_sets_shared[i].reveal_to(i)  
+    stop_timer(i)       
     return active_sets
 

@@ -12,8 +12,8 @@ from Programs.Source.trip import *
 import sys
 # Default values (optional)
 m = 3  # Number of parties
-n = 500  # Number of samples
-d = 100  # Number of features
+n = 10  # Number of samples
+d = 3  # Number of features
 
 
 # Parse arguments only when running (not compiling)

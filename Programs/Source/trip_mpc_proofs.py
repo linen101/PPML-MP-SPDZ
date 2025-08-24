@@ -14,20 +14,15 @@ types.cfix.set_precision(f=fprecision)
 
 def range_check_array(size, B):
     matrix_result = generate_random_shared_array(size, alpha=0, beta=1)
-    @for_range_opt(size)
-    def _(i):
-        result = (matrix_result[i]< B )  
-        result.reveal()
+    result = (matrix_result[:]< B )  
+    result.reveal()
   
 
 def range_check_matrix(size, B):
     matrix_result = generate_random_shared_matrix(size, alpha=0, beta=1)
-    @for_range_opt(size)
-    def _(i):
-        @for_range_opt(size)
-        def _(i):
-            result = (matrix_result[i][j] < q )  
-            result.reveal()
+
+    result = (matrix_result[:][:] < q )  
+    result.reveal()
   
 def inverse_check(size, epsilon=0.0001):
     matrix_result = generate_epsilon_matrix(n=size, alpha=0, beta=0.00001)

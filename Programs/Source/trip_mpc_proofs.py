@@ -42,15 +42,15 @@ def initial_input_commitment_proofs(n, d, alpha, beta, m, B):
     i=10  
     start_timer(i)
     # X_i rows are needed to check bounds.
-    matrix_sxi = generate_random_shared_matrix(1, d, alpha, beta)
-    matrix_sxit = generate_random_shared_matrix(d, 1, alpha, beta)
-    matrix_sy = generate_random_shared_matrix(n, 1, alpha, beta)  
-    @for_range_opt(m)
-    def _(j): 
-        @for_range_opt(n)
-        def _(i):
-            BX =  mat_prod(a=matrix_sxi, b=matrix_sxit)
-            range_check_array(size=n, B=B)
+    for j in range(m): 
+        matrix_si = generate_personal_matrix(j, 1, d, alpha, beta)
+        matrix_sit = generate_personal_matrix(j, d, 1, alpha, beta)
+        matrix_syr = generate_personal_matrix(j, n, 1, alpha, beta) 
+        matrix_sxi = share_personal_matrix(matrix_si, 1, d)
+        matrix_sxit = share_personal_matrix(matrix_sit, d, 1) 
+        matrix_sy = share_personal_matrix(matrix_syr, n, 1)
+        BX =  mat_prod(a=matrix_sxi, b=matrix_sxit)
+        range_check_array(size=n, B=B)
         range_check_array(size=n, B=B)
     stop_timer(i)    
             
@@ -59,12 +59,16 @@ def model_input_commitment_proofs(n, d, alpha, beta, m):
     start_timer(i)
     # measure overhead of sharing personal matrix
     # has been computed in model_input_commitment of trip
-    matrix_sa = generate_random_shared_matrix(1, n, alpha, beta)
-    matrix_sb = generate_random_shared_matrix(n, 1, alpha, beta)
-    matrix_sc = generate_random_shared_matrix(1, d, alpha, beta)
-    matrix_sd = generate_random_shared_matrix(d, 1, alpha, beta)
-    @for_range_opt(m)
-    def _(j):
+
+    for j in range(m): 
+        matrix_sar = generate_personal_matrix(j, 1, n, alpha, beta)
+        matrix_sbr = generate_personal_matrix(j, n, 1, alpha, beta)
+        matrix_scr = generate_personal_matrix(j, 1, d, alpha, beta)
+        matrix_sdr = generate_personal_matrix(j, d, 1, alpha, beta)
+        matrix_sa = share_personal_matrix(matrix_sar, 1, n)
+        matrix_sb = share_personal_matrix(matrix_sbr, n, 1)
+        matrix_sc = share_personal_matrix(matrix_scr, 1, d)
+        matrix_sd = share_personal_matrix(matrix_sdr, d, 1)
         @for_range_opt(3)
         def _(i):
             C = mat_prod(a=matrix_sa, b=matrix_sb)

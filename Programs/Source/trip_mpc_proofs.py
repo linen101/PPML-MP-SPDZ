@@ -11,7 +11,7 @@ from Programs.Source.trip import generate_epsilon_matrix, generate_personal_arra
 fprecision = 16
 types.sfix.set_precision(f=fprecision)
 types.cfix.set_precision(f=fprecision)
-n_threads = 4
+n_threads = 48
 
 def range_check_array(matrixy, B):
     result = (matrixy[:]< B )  

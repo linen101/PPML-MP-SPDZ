@@ -35,7 +35,7 @@ if len(sys.argv) > 4 and sys.argv[4].isdigit():
 alpha = 0
 beta = 1 
 B = 10
-initial_input_commitment_proofs(n, d, alpha, beta, m, B) 
-#model_input_commitment_proofs(n, d, alpha, beta , m)
-#participation_set_update_proofs(n, m, alpha, beta)
+#initial_input_commitment_proofs(n, d, alpha, beta, m, B) 
+model_input_commitment_proofs(n, d, alpha, beta , m)
+participation_set_update_proofs(n, m, alpha, beta)
 

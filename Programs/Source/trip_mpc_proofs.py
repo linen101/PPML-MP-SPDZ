@@ -76,7 +76,7 @@ def model_input_commitment_proofs(n, d, alpha, beta, m):
         matrix_sa = share_personal_matrix(matrix_sar, 1, n)
         matrix_sb = share_personal_matrix(matrix_sbr, n, 1)
         matrix_sc = share_personal_matrix(matrix_scr, 1, d)
-        matrix_sd = share_personal_matrix(matrsix_sdr, d, 1)
+        matrix_sd = share_personal_matrix(matrix_sdr, d, 1)
         
     @for_range_opt_multithread(n_threads, m)
     def _(k):    

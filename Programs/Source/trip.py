@@ -209,10 +209,10 @@ def median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets, mal
             sum_greater_shared = greater_shared + sum_greater_shared
            
             # verify input in the protocol
-            @if_(k==0 & mal_flag==1)
-            def _():
-                greater_shared_malicious[i] = count_greater_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
-                less_shared_malicious[i] = count_smaller_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
+            @if_(k==0 & mal_flag)
+            def _(): 
+                greater_shared_malicious[i] = count_greater_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=q)
+                less_shared_malicious[i] = count_smaller_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=q)
                 cond = (less_shared_array[i] == less_shared_malicious[i]) 
                 library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious in initial check" ,i)
 
@@ -311,9 +311,9 @@ def dp_median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets, 
         
         for i in range(num_players):
             # count elements in the database of player i smaller than m
-            less = count_smaller_than_m(player=i, dataset=datasets[i], dataset_length=dataset_length, m=m[k])
+            less = count_smaller_than_m(player=i, dataset=datasets[i], dataset_length=dataset_length, m=q)
             # count elements in the database of player i smaller than m
-            greater = count_greater_than_m(player=i, dataset=datasets[i], dataset_length=dataset_length, m=m[k])
+            greater = count_greater_than_m(player=i, dataset=datasets[i], dataset_length=dataset_length, m=q)
             
             # secret share the personal less than result of player i.
             less_shared = sint(less)

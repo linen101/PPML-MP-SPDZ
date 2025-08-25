@@ -96,20 +96,13 @@ def generate_epsilon_matrix(n, alpha, beta):
     return matrix_a
 
 def count_smaller_than_m(player, dataset, dataset_length, m):
-    # element-wise comparison (A < m)
     comparison_results = types.personal(player, Array(dataset_length, types.cint))
     count = types.personal(player, cint(0))
-    #MemValue(count)
-    c = types.personal(player, Array(dataset_length, types.cint))
-    b = types.Array(dataset_length, types.cint)
-    b.assign_all(1)
-    c[:] = b[:]
-    comparison_results = dataset[:] < m
     for i in range(dataset_length):
-        #def _(i):
-        #c = (dataset[i] < m) + cint(0)
-        count + comparison_results[i]
-    # Sum the binary results to count
+    #def _(i):
+        c = (dataset[i] < m) + cint(0)
+        count = count + c
+    return count  
     #return count
 
 def count_greater_than_m(player, dataset, dataset_length, m):

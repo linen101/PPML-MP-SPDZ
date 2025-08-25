@@ -213,8 +213,8 @@ def median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets, mal
             def _():
                 greater_shared_malicious[i] = count_greater_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
                 less_shared_malicious[i] = count_smaller_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
-                cond = (less_shared_array[i] == less_shared_malicious[i]) 
-                library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
+                #cond = (less_shared_array[i] == less_shared_malicious[i]) 
+                #library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
 
         # Number of total elements
         n = dataset_length * num_players

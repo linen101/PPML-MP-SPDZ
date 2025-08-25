@@ -283,6 +283,12 @@ def dp_median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets, 
     greater_to_verify = types.Array(num_players,  types.sint)
     greater_to_verify.assign_all(0)
     
+    # parties compute the result in mpc
+    less_shared_malicious = types.Array(num_players,  types.sint)
+    less_shared_malicious.assign_all(0)
+    greater_shared_malicious = types.Array(num_players,  types.sint)
+    greater_shared_malicious.assign_all(0)
+    
     # party i shares the result
     less_shared_array = types.Array(num_players,  types.sint)
     greater_shared_array = types.Array(num_players,  types.sint)
@@ -327,13 +333,7 @@ def dp_median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets, 
 
             # verify input in the protocol
             @if_(k==0 & mal_flag)
-            def _():
-                # parties compute the result in mpc
-                less_shared_malicious = types.Array(num_players,  types.sint)
-                less_shared_malicious.assign_all(0)
-                greater_shared_malicious = types.Array(num_players,  types.sint)
-                greater_shared_malicious.assign_all(0)
-      
+            def _():      
                 greater_shared_malicious[i] = count_greater_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
                 less_shared_malicious[i] = count_smaller_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
                 cond = (less_shared_array[i] == less_shared_malicious[i]) 

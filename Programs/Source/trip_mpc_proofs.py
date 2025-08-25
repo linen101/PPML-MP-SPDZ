@@ -76,7 +76,7 @@ def model_input_commitment_proofs(n, d, alpha, beta, m):
         matrix_sa = share_personal_matrix(matrix_sar, 1, n)
         matrix_sb = share_personal_matrix(matrix_sbr, n, 1)
         matrix_sc = share_personal_matrix(matrix_scr, 1, d)
-        matrix_sd = share_personal_matrix(matrix_sdr, d, 1)
+        matrix_sd = share_personal_matrix(matrsix_sdr, d, 1)
         
     @for_range_opt_multithread(n_threads, m)
     def _(k):    
@@ -106,7 +106,7 @@ def participation_set_update_proofs(n, m, alpha, beta):
     q = dp_median_mpc(num_players=m, dataset_length=n, alpha=alpha, beta=beta, quantile=quantile, datasets=datasets, mal_flag=1)
         
     @for_range_opt(m)
-    def _(i):
+    def _(k):
         # Generate a secure random dataset for each player
         @for_range_opt(n)
         def _(j):

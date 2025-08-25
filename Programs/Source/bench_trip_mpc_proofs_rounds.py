@@ -37,5 +37,5 @@ beta = 1
 B = 10
 #initial_input_commitment_proofs(n, d, alpha, beta, m, B) 
 model_input_commitment_proofs(n, d, alpha, beta , m)
-participation_set_update_proofs(n, m, alpha, beta)
+#participation_set_update_proofs(n, m, alpha, beta)
 

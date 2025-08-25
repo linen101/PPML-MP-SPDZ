@@ -103,7 +103,7 @@ def participation_set_update_proofs(n, m, alpha, beta):
     
     quantile = int (n*m / 2)
     
-    q = dp_median_mpc(num_players=m, dataset_length=n, alpha=alpha, beta=beta, quantile=quantile, datasets=datasets, mal_flag=1)
+    q = median_mpc(num_players=m, dataset_length=n, alpha=alpha, beta=beta, quantile=quantile, datasets=datasets, mal_flag=1)
         
     @for_range_opt(m)
     def _(k):

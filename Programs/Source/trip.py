@@ -129,7 +129,7 @@ def count_smaller_than_m_secretly( dataset, dataset_length, m):
     count = types.sint(0)
     for i in range(dataset_length):
     #def _(i):
-        c = (sint(dataset[i]) < m) + sint(0)
+        c = (sfix(dataset[i]) < m) + sint(0)
         count = count + c
     return count     
 
@@ -139,7 +139,7 @@ def count_greater_than_m_secretly( dataset, dataset_length, m):
     count = types.sint(0)
     for i in range(dataset_length):
     #def _(i):
-        c = (sint(dataset[i]) > m) + sint(0)
+        c = (sfix(dataset[i]) > m) + sint(0)
         count = count + c
     return count    
 

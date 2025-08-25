@@ -213,8 +213,8 @@ def median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets, mal
             def _():
                 greater_shared_malicious[i] = count_greater_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
                 less_shared_malicious[i] = count_smaller_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
-                #cond = (less_shared_array[i] == less_shared_malicious[i]) 
-                #library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
+                cond = (less_shared_array[i] == less_shared_malicious[i]) 
+                library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious in initial check" ,i)
 
         # Number of total elements
         n = dataset_length * num_players
@@ -226,11 +226,11 @@ def median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets, mal
         # MALICIOUS CHECK
         for i in range(num_players):  
             cond = (less_shared_array[i] + greater_shared_array[i]) <= dataset_length  
-            library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
+            library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious in iterative" ,i)
             cond = (less_shared_array[i] >= less_to_verify[i]) 
-            library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
+            library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious in iterative" ,i)
             cond = (greater_shared_array[i] >= greater_to_verify[i]) 
-            library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
+            library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious in iterative" ,i)
         
         # Update a and b based on the sums
         #cond = (sum_less_shared >= quantile)
@@ -337,7 +337,7 @@ def dp_median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets, 
                 greater_shared_malicious[i] = count_greater_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
                 less_shared_malicious[i] = count_smaller_than_m_secretly(dataset=datasets[i], dataset_length=dataset_length, m=m[k])
                 cond = (less_shared_array[i] == less_shared_malicious[i]) 
-                #library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
+                library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious in initial" ,i)
 
         # Number of total elements
         n = dataset_length * num_players
@@ -345,11 +345,11 @@ def dp_median_mpc(num_players, dataset_length, alpha, beta, quantile, datasets, 
         # MALICIOUS CHECK
         for i in range(num_players):  
             cond = (less_shared_array[i] + greater_shared_array[i]) <= dataset_length  
-            #library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
+            library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious in malicious iterative" ,i)
             cond = (less_shared_array[i] >= less_to_verify[i]) 
-            #library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
+            library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious in malicious iterative" ,i)
             cond = (greater_shared_array[i] >= greater_to_verify[i]) 
-            #library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious" ,i)
+            library.runtime_error_if(cond.reveal() != 1, "Player  %s is malicious in  malicious iterative" ,i)
         
         # Print sums
         #print_ln("Sum of Smaller than values: %s", sum_less_shared.reveal())         

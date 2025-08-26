@@ -12,7 +12,7 @@ from Programs.Source.trip import *
 import sys
 # Default values (optional)
 m = 2  # Number of parties
-n = 500  # Number of samples
+n = 5  # Number of samples
 d = 10  # Number of features
 
 

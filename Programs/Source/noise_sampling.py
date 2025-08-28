@@ -15,7 +15,11 @@ from Sampling.primitives_mpc import distributed_sample, bitwise_sample
 
 
 n=1
-
-start_timer(1)
-noised_y = bitwise_sample(n=1, s=0.5, mechanism='gauss', binary=0, num_party=2) # use bitwise sampling
-stop_timer(1)
+m=2
+start_timer(2)
+print_ln("parties:%s", m)
+print_ln("samples:%s", n)
+test = sint(1)
+print_ln("test: %s", test.reveal())
+noised_y = bitwise_sample(n=n, s=1, mechanism='gauss', binary=0, num_party=m) # use bitwise sampling
+stop_timer(2)

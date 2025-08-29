@@ -23,8 +23,11 @@ if len(sys.argv) > 2 and sys.argv[2].isdigit():
     n = int(sys.argv[2])
     print_ln(" n  =  %s", n)
    
-if len(sys.argv) > 3 and sys.argv[3].isnumeric():  
-    s = float(sys.argv[3])
+if len(sys.argv) > 3:
+    try:
+        s = float(sys.argv[3])
+    except ValueError:
+        pass
     print_ln("s = %s", s)
     
 
@@ -34,7 +37,7 @@ if len(sys.argv) > 4 and sys.argv[4].isdigit():
 #from Sampling.primitives_mpc import distributed_sample, bitwise_sample
 
 def binomial_sample(s, n):
-    k = round(2*s)
+    k = round(2*s*2**8)
     print_ln("k is: %s", k)
     noise = types.Array(n, types.sfix)
     s1=sint(0)

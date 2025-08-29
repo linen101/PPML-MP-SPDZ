@@ -70,7 +70,7 @@ def bitwise_sample(mechanism='lap', n=4096, s=1, epsilon=1, delta=1e-5, lambd=12
             sa = gauss_sampler(option)
             ans = sa.discrete_gaussian_dlap_rejection()
 
-    sa.generate_input_bits()
+    #sa.generate_input_bits()
 
     return dtype_convert(ans, binary)
 

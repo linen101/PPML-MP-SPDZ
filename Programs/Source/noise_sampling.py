@@ -1,3 +1,4 @@
+
 #import numpy as np
 import itertools
 import random
@@ -22,8 +23,8 @@ if len(sys.argv) > 2 and sys.argv[2].isdigit():
     n = int(sys.argv[2])
     print_ln(" n  =  %s", n)
    
-if len(sys.argv) > 3 and sys.argv[3].isdigit():  
-    s = int(sys.argv[3])
+if len(sys.argv) > 3 and sys.argv[3].isnumeric():  
+    s = float(sys.argv[3])
     print_ln("s = %s", s)
     
 
@@ -33,7 +34,8 @@ if len(sys.argv) > 4 and sys.argv[4].isdigit():
 #from Sampling.primitives_mpc import distributed_sample, bitwise_sample
 
 def binomial_sample(s, n):
-    k = 2*s
+    k = round(2*s)
+    print_ln("k is: %s", k)
     noise = types.Array(n, types.sfix)
     s1=sint(0)
     s2=sint(0)
@@ -52,7 +54,8 @@ def binomial_sample(s, n):
 
 
 start_timer(2)
-print_ln("samples:%s", n)
+print_ln("samples: %s", n)
+print_ln("fixed-point variance: %s", s)
 noise = binomial_sample(s=s, n=n)
 print_ln("noise: %s", noise.reveal())
 

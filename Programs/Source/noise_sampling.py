@@ -37,7 +37,7 @@ if len(sys.argv) > 4 and sys.argv[4].isdigit():
 #from Sampling.primitives_mpc import distributed_sample, bitwise_sample
 
 def binomial_sample(s, n):
-    k = round(2*s*2**fprecision)
+    k = round(2*(s**2)*(2**fprecision))
     print_ln("k is: %s", k)
     noise = types.Array(n, types.sfix)
     s1=sint(0)

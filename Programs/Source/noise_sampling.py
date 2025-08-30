@@ -12,8 +12,8 @@ from Programs.Source import random_matrix
 from Programs.Source.trip import *
 import sys
 
-fprecision = 8
-types.sfix.set_precision(f=fprecision)
+fprecision = 9
+types.sfix.set_precision(f=fprecision, k=16)
 types.cfix.set_precision(f=fprecision)
 n=500
 s=64
